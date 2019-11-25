@@ -1,0 +1,56 @@
+html, body {
+  height: 100%;
+  margin: 0 1px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.form {
+  max-width: 720px;
+}
+
+.text-left {
+  text-align: start;
+}
+
+.text-right {
+  text-align: end;
+}
+
+.text-color-primary {
+  color: #409EFF;
+}
+
+.text-main-title {
+  font-size: 22px;
+}
+
+.text-title {
+  font-size: 20px;
+}
+
+.text-subtitle {
+  font-size: 18px;
+}
+
+.text-body {
+  font-size: 16px;
+}
+
+.text-body-small {
+  font-size: 15px;
+}
+
+.text-comment {
+  font-size: 14px;
+}
+
+.background-primary {
+  background: #409EFF;
+}
+
+.background-info {
+  background: #909399;
+}
