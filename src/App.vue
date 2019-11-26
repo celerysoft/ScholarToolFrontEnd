@@ -1,8 +1,8 @@
 <template>
-  <el-container id="app" style="height: 100%;" direction="vertical">
+  <el-container id="app" class=" text-color-primary" style="height: 100%;" direction="vertical">
     <el-header style="padding: 0">
       <div class="header">
-        <div class="header-icon-button text-main-title text-color-primary"
+        <div class="header-icon-button text-main-title"
              :class="{ clickable: isLogin }"
              @click="toggleSidebar">
           <i class="el-icon-menu"></i>

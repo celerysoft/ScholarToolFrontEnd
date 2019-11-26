@@ -1,18 +1,7 @@
 <template>
-  <div class="home">
+  <div class="event">
     <div>
-      <h1 class="text-main-title">欢迎来到 Celery Soft 学术</h1>
-
-      <div>
-        <p>今天是<b>{{ date }}</b>，来看看历史上的今天发生了什么：</p>
-        <ul>
-          <li class="text-left" v-for="history in histories" v-bind:key="history.year">
-            <p>
-              <b>{{ history.year }}</b>年，<span v-text="history.title"></span>
-            </p>
-          </li>
-        </ul>
-      </div>
+      <event-list :data="events" v-on:item-click="onEventClick"></event-list>
     </div>
     <div class="placeholder"></div>
     <Footer></Footer>
@@ -24,24 +13,20 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 import MutationTypes from '@/store/mutation-types';
 import { MenuIndex } from '@/toolkits/constant'; // @ is an alias to /src
+import getEventExFromEvent, { Event, EventEx } from '@/network/response/event';
+import EventList from '@/components/EventList.vue';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
 
 @Component({
   components: {
+    EventList,
     Footer,
   },
 })
 
 export default class Home extends Vue {
-    date: string;
-
-    histories: string[] = [];
-
-    constructor() {
-      super();
-      this.date = '';
-    }
+    events: EventEx[] = [];
 
     /* eslint-disable class-methods-use-this */
     beforeRouteEnter(to: Route, from: Route, next: any) {
@@ -54,23 +39,29 @@ export default class Home extends Vue {
     }
 
     mounted() {
-      this.getTodayInHistoryData();
+      this.$store.commit(MutationTypes.ON_ACTIVATED_MENU_CHANGE, MenuIndex.Event);
 
-      this.$store.commit(MutationTypes.ON_ACTIVATED_MENU_CHANGE, MenuIndex.Home);
+      this.getEvents();
     }
 
-    async getTodayInHistoryData() {
-      await Api.getTodayInHistory()
+    getEvents() {
+      Api.getEvents()
         .then((response) => {
-          this.date = response.data.today;
-          this.histories = response.data.result;
+          this.events = (response.data.events as Event[]).map(getEventExFromEvent);
         });
+    }
+
+    onEventClick(index: number) {
+      const { uuid } = this.events[index];
+      this.$router.push({
+        path: `/event/${uuid}`,
+      });
     }
 }
 </script>
 
 <style lang="scss" scoped>
-  .home {
+  .event {
     margin: 0 auto;
     height: 100%;
     max-width: 960px;

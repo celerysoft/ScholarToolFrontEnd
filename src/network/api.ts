@@ -8,7 +8,7 @@ import MutationTypes from '@/store/mutation-types';
 const Axios = require('axios');
 
 class Api {
-  readonly TODAY_IN_HISTORY_URL:string = 'today-in-history';
+  readonly TODAY_IN_HISTORY_URL: string = 'today-in-history';
 
   readonly REGISTER_URL: string = 'register';
 
@@ -17,6 +17,8 @@ class Api {
   readonly USER_INFORMATION_URL: string = 'user';
 
   readonly PASSWORD_URL: string = 'user/password';
+
+  readonly EVENT_URL: string = 'event';
 
   private axios: AxiosInstance;
 
@@ -142,6 +144,12 @@ class Api {
       old_password: oldPassword,
       new_password: newPassword,
     }, {
+      showError: true,
+    });
+  }
+
+  public getEvents(): AxiosPromise {
+    return this.axios.get(this.EVENT_URL, {
       showError: true,
     });
   }
