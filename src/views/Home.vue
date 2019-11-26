@@ -21,6 +21,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Route } from 'vue-router';
 import MutationTypes from '@/store/mutation-types';
 import { MenuIndex } from '@/toolkits/constant'; // @ is an alias to /src
 import Footer from '@/components/Footer.vue';
@@ -40,6 +41,16 @@ export default class Home extends Vue {
     constructor() {
       super();
       this.date = '';
+    }
+
+    /* eslint-disable class-methods-use-this */
+    beforeRouteEnter(to: Route, from: Route, next: any) {
+      next((vm: Home) => {
+        if (!vm.$store.getters.isLogin) {
+          const toPath: string = '/login/';
+          next(toPath);
+        }
+      });
     }
 
     mounted() {

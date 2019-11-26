@@ -3,8 +3,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import MutationTypes from './mutation-types';
-// import RegisterPayload from '@/store/mutation-models/register';
-// import LoginPayload from '@/store/mutation-models/login';
+import RegisterPayload from '@/store/mutation-models/register';
+import LoginPayload from '@/store/mutation-models/login';
 import { UserStatus } from '@/toolkits/constant';
 
 Vue.use(Vuex);
@@ -24,24 +24,26 @@ export default new Vuex.Store({
     [MutationTypes.ACTIVATION](state) {
       state.userStatus = UserStatus.Active;
     },
-    // [MutationTypes.REGISTER](state, payload: RegisterPayload) {
-    //   state.isLogin = true;
-    //   state.userStatus = UserStatus.WaitingActivation;
-    //   state.jwt = payload.jwt;
-    //   state.username = payload.username;
-    //   state.email = payload.email;
-    //   state.uuid = payload.uuid;
-    // },
+    [MutationTypes.REGISTER](state, payload: RegisterPayload) {
+      state.isLogin = true;
+      state.userStatus = UserStatus.WaitingActivation;
+      state.jwt = payload.jwt;
+      state.username = payload.username;
+      state.email = payload.email;
+      state.uuid = payload.uuid;
+    },
     [MutationTypes.ON_RECEIVED_JWT](state, jwt: string) {
       state.jwt = jwt;
     },
-    // [MutationTypes.LOGIN](state, payload: LoginPayload) {
-    //   state.isLogin = true;
-    //   state.userStatus = payload.status;
-    //   state.username = payload.username;
-    //   state.email = payload.email;
-    //   state.uuid = payload.uuid;
-    // },
+    [MutationTypes.LOGIN](state, payload: LoginPayload) {
+      console.log(state);
+      state.isLogin = true;
+      state.userStatus = payload.status;
+      state.username = payload.username;
+      state.email = payload.email;
+      state.uuid = payload.uuid;
+      console.log(state);
+    },
     [MutationTypes.LOGOUT](state) {
       state.isLogin = false;
       state.jwt = '';

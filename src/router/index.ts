@@ -6,6 +6,16 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: '/login/',
+    name: '用户登录',
+    component: () => import('@/views/Login.vue'),
+  },
+  {
+    path: '/register/',
+    name: '用户注册',
+    component: () => import('@/views/Register.vue'),
+  },
+  {
     path: '/',
     name: '主页',
     component: Home,

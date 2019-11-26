@@ -1,8 +1,9 @@
 export enum MenuIndex {
   Home = '0',
-  File = '1',
-  Sharing = '2',
+  Event = '1',
+  Service = '2',
   Account = '3',
+  Manage = '4'
 }
 
 export enum UserStatus {

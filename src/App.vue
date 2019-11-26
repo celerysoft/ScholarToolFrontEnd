@@ -7,8 +7,8 @@
              @click="toggleSidebar">
           <i class="el-icon-menu"></i>
         </div>
-        <div class="header-element text-main-title clickable" style="margin-left: 0"
-             @click="backToHomepage">
+        <div class="header-element text-main-title clickable"
+             style="margin-left: 0; padding: 0 31px;" @click="backToHomepage">
           Celery Soft 学术
         </div>
         <header-divider></header-divider>
@@ -34,20 +34,24 @@
                  @open="handleOpen"
                  @close="handleClose">
           <el-menu-item index="0" route="/">
-            <i class="el-icon-s-home"></i>
+            <i class="el-icon-house"></i>
             <span>首页</span>
           </el-menu-item>
-          <el-menu-item index="1" route="/file/">
-            <i class="el-icon-folder"></i>
-            <span>我的文件</span>
+          <el-menu-item index="1" route="/event/">
+            <i class="el-icon-chat-dot-round"></i>
+            <span>公告</span>
           </el-menu-item>
-          <el-menu-item index="2" route="/sharing/">
-            <i class="el-icon-share"></i>
-            <span>我的分享</span>
+          <el-menu-item index="2" route="/service/">
+            <i class="el-icon-reading"></i>
+            <span>学术</span>
           </el-menu-item>
           <el-menu-item index="3" route="/account/">
-            <i class="el-icon-user-solid"></i>
+            <i class="el-icon-user"></i>
             <span>个人信息</span>
+          </el-menu-item>
+          <el-menu-item index="4" route="/manage/">
+            <i class="el-icon-setting"></i>
+            <span>后台管理</span>
           </el-menu-item>
           <el-menu-item @click="showLogoutDialog">
             <i class="el-icon-coffee-cup"></i>
@@ -55,7 +59,7 @@
           </el-menu-item>
         </el-menu>
         <div class="text-comment sidebar-footer">
-          <span v-if="!isCollapse">©2014-2019 Celery Soft</span>
+          <span v-if="!isCollapse">©2017-2020 Celery Soft 学术</span>
           <span v-else>©</span>
         </div>
       </el-aside>
@@ -149,7 +153,7 @@ export default class App extends Vue {
       this.logoutDialogVisible = false;
       this.$store.commit(MutationTypes.LOGOUT);
       this.$router.push({
-        path: '/',
+        path: '/login/',
         query: {
           next: this.$route.path,
         },
