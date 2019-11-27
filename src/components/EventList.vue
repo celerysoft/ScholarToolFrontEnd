@@ -22,12 +22,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { EventEx } from '@/network/response/event';
+import { EventExResponse } from '@/network/response/event';
 
 @Component
 export default class EventList extends Vue {
     @Prop()
-    private data?: EventEx[];
+    private data?: EventExResponse[];
 
     handleListItemClick(index: number) {
       this.$emit('item-click', index);

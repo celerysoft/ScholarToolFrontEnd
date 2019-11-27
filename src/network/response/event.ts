@@ -1,4 +1,4 @@
-export interface Event {
+export interface EventResponse {
   uuid: string
 
   title: string
@@ -11,11 +11,11 @@ export interface Event {
   created_at: string
 }
 
-export interface EventEx extends Event {
+export interface EventExResponse extends EventResponse {
   createAt: string;
 }
 
-export default function getEventExFromEvent(event: Event): EventEx {
+export default function getEventExFromEvent(event: EventResponse): EventExResponse {
   const date = new Date(event.created_at);
   const createAt = `${date.getFullYear()}年${date.getMonth()}月${date.getDay()}日`;
   return Object.assign(event, { createAt });

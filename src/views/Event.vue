@@ -13,7 +13,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 import MutationTypes from '@/store/mutation-types';
 import { MenuIndex } from '@/toolkits/constant'; // @ is an alias to /src
-import getEventExFromEvent, { Event, EventEx } from '@/network/response/event';
+import getEventExFromEvent, { EventResponse, EventExResponse } from '@/network/response/event';
 import EventList from '@/components/EventList.vue';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
@@ -25,18 +25,18 @@ import Api from '@/network/api';
   },
 })
 
-export default class Home extends Vue {
-    events: EventEx[] = [];
+export default class Event extends Vue {
+    events: EventExResponse[] = [];
 
     /* eslint-disable class-methods-use-this */
-    beforeRouteEnter(to: Route, from: Route, next: any) {
-      next((vm: Home) => {
-        if (!vm.$store.getters.isLogin) {
-          const toPath: string = '/login/';
-          next(toPath);
-        }
-      });
-    }
+    // beforeRouteEnter(to: Route, from: Route, next: any) {
+    //   next((vm: Event) => {
+    //     if (!vm.$store.getters.isLogin) {
+    //       const toPath: string = '/login/';
+    //       next(toPath);
+    //     }
+    //   });
+    // }
 
     mounted() {
       this.$store.commit(MutationTypes.ON_ACTIVATED_MENU_CHANGE, MenuIndex.Event);
@@ -47,7 +47,7 @@ export default class Home extends Vue {
     getEvents() {
       Api.getEvents()
         .then((response) => {
-          this.events = (response.data.events as Event[]).map(getEventExFromEvent);
+          this.events = (response.data.events as EventResponse[]).map(getEventExFromEvent);
         });
     }
 

@@ -44,14 +44,14 @@ export default class Home extends Vue {
     }
 
     /* eslint-disable class-methods-use-this */
-    beforeRouteEnter(to: Route, from: Route, next: any) {
-      next((vm: Home) => {
-        if (!vm.$store.getters.isLogin) {
-          const toPath: string = '/login/';
-          next(toPath);
-        }
-      });
-    }
+    // beforeRouteEnter(to: Route, from: Route, next: any) {
+    //   next((vm: Home) => {
+    //     if (!vm.$store.getters.isLogin) {
+    //       const toPath: string = '/login/';
+    //       next(toPath);
+    //     }
+    //   });
+    // }
 
     mounted() {
       this.getTodayInHistoryData();

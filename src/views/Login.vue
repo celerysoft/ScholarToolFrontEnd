@@ -43,19 +43,19 @@ export default class Login extends Vue {
   }
 
   /* eslint-disable class-methods-use-this */
-  beforeRouteEnter(to: Route, from: Route, next: any) {
-    next((vm: Login) => {
-      if (vm.isLogin) {
-        let toPath: string;
-        if (from !== null && from.path) {
-          toPath = from.path;
-        } else {
-          toPath = '/';
-        }
-        next(toPath);
-      }
-    });
-  }
+  // beforeRouteEnter(to: Route, from: Route, next: any) {
+  //   next((vm: Login) => {
+  //     if (vm.isLogin) {
+  //       let toPath: string;
+  //       if (from !== null && from.path) {
+  //         toPath = from.path;
+  //       } else {
+  //         toPath = '/';
+  //       }
+  //       next(toPath);
+  //     }
+  //   });
+  // }
   /* eslint-enable class-methods-use-this */
 
   get isLogin() {

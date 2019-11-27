@@ -1,6 +1,8 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
+import VueRouter, { Route } from 'vue-router';
 import Home from '../views/Home.vue';
+import MutationTypes from '@/store/mutation-types';
+import store from '@/store/index';
 
 Vue.use(VueRouter);
 
@@ -39,6 +41,34 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+function isLogin(): boolean {
+  return store.getters.isLogin;
+}
+
+const urlsWithoutLogin = ['/login/', '/register/'];
+
+function isUrlNeedLogin(url: string): boolean {
+  return urlsWithoutLogin.indexOf(url) === -1;
+}
+
+router.beforeEach((to: Route, from: Route, next) => {
+  if (to.path === '/do-nothing/') {
+    next(false);
+  }
+
+  if (!isLogin() && isUrlNeedLogin(to.path)) {
+    next('/login/');
+  }
+
+  if (isLogin() && !isUrlNeedLogin(to.path)) {
+    next(from.path);
+  }
+
+  store.commit(MutationTypes.ON_ROUTER_CHANGE, to);
+
+  next();
 });
 
 export default router;
