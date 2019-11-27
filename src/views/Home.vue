@@ -5,7 +5,7 @@
 
       <div>
         <p>今天是<b>{{ date }}</b>，来看看历史上的今天发生了什么：</p>
-        <ul>
+        <ul class="today-in-history-list">
           <li class="text-left" v-for="history in histories" v-bind:key="history.year">
             <p>
               <b>{{ history.year }}</b>年，<span v-text="history.title"></span>
@@ -81,12 +81,7 @@ export default class Home extends Vue {
     align-items: center;
   }
 
-  .input {
-    margin-top: 1px;
-    margin-bottom: 16px;
-  }
-
-  .button {
+  .today-in-history-list {
     margin-top: 16px;
   }
 
