@@ -1,3 +1,5 @@
+@import "~element-ui/packages/theme-chalk/src/common/var";
+
 html, body {
   height: 100%;
   margin: 0 1px;
@@ -36,33 +38,67 @@ html, body {
 }
 
 .text-main-title {
-  font-size: 22px;
+  font-size: $--font-size-extra-large;
 }
 
 .text-title {
-  font-size: 20px;
+  font-size: $--font-size-large;
 }
 
 .text-subtitle {
-  font-size: 18px;
+  font-size: $--font-size-medium;
 }
 
 .text-body {
-  font-size: 16px;
+  font-size: $--font-size-base;
 }
 
 .text-body-small {
-  font-size: 15px;
+  font-size: $--font-size-small;
 }
 
 .text-comment {
-  font-size: 14px;
+  font-size: $--font-size-extra-small;
 }
 
 .background-primary {
-  background: #409EFF;
+  background: $--color-primary;
 }
 
 .background-info {
-  background: #909399;
+  background: $--background-color-base;
+}
+
+.markdown {
+  width: 100%;
+  text-align: start;
+  h1 {
+    color: $--color-primary-light-9;
+    background-color: $--color-primary;
+    border-left: 16px solid $--color-primary-light-5;
+    margin-left: -16px;
+    padding-left: 16px;
+    font-size: $--font-size-extra-large;
+    text-shadow: none;
+    @extend .text-main-title;
+  }
+  h2 {
+    border-left: 16px solid $--color-primary-light-5;
+    padding-left: 16px;
+    text-shadow: none;
+    @extend .text-title;
+  }
+  h3 {
+    border-left: 4px solid $--color-primary-light-5;
+    padding-left: 16px;
+    text-shadow: none;
+    @extend .text-subtitle;
+  }
+  h4 {
+    @extend .text-body;
+  }
+  p {
+    @extend .text-body;
+    @extend .text-color-primary;
+  }
 }

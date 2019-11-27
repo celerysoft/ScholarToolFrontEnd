@@ -153,6 +153,15 @@ class Api {
       showError: true,
     });
   }
+
+  public getEvent(uuid: string): AxiosPromise {
+    return this.axios.get(this.EVENT_URL, {
+      params: {
+        uuid,
+      },
+      showError: true,
+    });
+  }
 }
 
 export default new Api();

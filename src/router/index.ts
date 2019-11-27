@@ -27,6 +27,11 @@ const routes = [
     name: '公告',
     component: () => import('@/views/Event.vue'),
   },
+  {
+    path: '/event/:uuid',
+    name: '公告详情',
+    component: () => import('@/views/EventDetail.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',

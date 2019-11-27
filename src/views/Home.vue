@@ -72,7 +72,7 @@ export default class Home extends Vue {
 <style lang="scss" scoped>
   .home {
     margin: 0 auto;
-    height: 100%;
+    min-height: 100%;
     max-width: 960px;
     display: flex;
     display: -webkit-flex;

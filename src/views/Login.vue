@@ -117,7 +117,7 @@ export default class Login extends Vue {
 <style lang="scss" scoped>
   .center-container {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     /*min-height: 480px;*/
     display: flex;
     display: -webkit-flex;

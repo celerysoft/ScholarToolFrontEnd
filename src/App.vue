@@ -1,33 +1,30 @@
 <template>
-  <el-container id="app" class=" text-color-primary" style="height: 100%;" direction="vertical">
-    <el-header style="padding: 0">
-      <div class="header">
-        <div class="header-icon-button text-main-title"
-             :class="{ clickable: isLogin }"
-             @click="toggleSidebar">
-          <i class="el-icon-menu"></i>
-        </div>
-        <div class="header-element text-main-title clickable"
-             style="margin-left: 0; padding: 0 31px;" @click="backToHomepage">
-          Celery Soft 学术
-        </div>
-        <header-divider></header-divider>
-        <div class="header-element text-title">{{ this.$route.name }}</div>
-        <div class="header-placeholder"></div>
-        <div v-if="isLogin" class="header-user-information-box" style="height: 24px">
-          <i class="el-icon-user-solid"></i>
-          <span class="text-body header-username">{{ this.$store.getters.username }}</span>
-        </div>
-        <div v-else class="login-container">
-          <el-link :underline="false" class="register-button" href="/register/">注册</el-link>
-          <el-link :underline="false" class="login-button" href="/login/">登录</el-link>
-        </div>
+  <el-container id="app" class="text-color-primary" style="height: 100%;" direction="vertical">
+    <el-header class="header">
+      <div class="header-icon-button text-main-title"
+           :class="{ clickable: isLogin }"
+           @click="toggleSidebar">
+        <i class="el-icon-menu text-color-accent"></i>
+      </div>
+      <div class="header-element text-main-title clickable"
+           style="margin-left: 0; padding: 0 38px;" @click="backToHomepage">
+        Celery Soft 学术
+      </div>
+      <header-divider></header-divider>
+      <div class="header-element text-title">{{ this.$route.name }}</div>
+      <div class="header-placeholder"></div>
+      <div v-if="isLogin" class="header-user-information-box" style="height: 24px">
+        <i class="el-icon-user-solid text-color-accent"></i>
+        <span class="text-body header-username">{{ this.$store.getters.username }}</span>
+      </div>
+      <div v-else class="login-container">
+        <el-link :underline="false" class="register-button" href="/register/">注册</el-link>
+        <el-link :underline="false" class="login-button" href="/login/">登录</el-link>
       </div>
     </el-header>
-    <el-container style="margin-top: 1px;">
-      <el-aside width="elAsideWidth" v-if="isLogin">
-        <el-menu style="height: calc(100% - 42px);"
-                 class="sidebar el-menu-vertical"
+    <el-container class="body">
+      <el-aside class="sidebar" width="elAsideWidth" v-if="isLogin">
+        <el-menu class="side-menu el-menu-vertical"
                  :default-active=activatedMenuIndex
                  :router="true"
                  :collapse="isCollapse"
@@ -63,7 +60,7 @@
           <span v-else>©</span>
         </div>
       </el-aside>
-      <el-main>
+      <el-main class="main-content">
         <router-view v-loading="isLoading"/>
 
         <el-dialog
@@ -168,7 +165,7 @@ export default class App extends Vue {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    /*color: #2c3e50;*/
   }
 
   #nav {
@@ -191,6 +188,7 @@ export default class App extends Vue {
     align-items: center;
     height: 60px;
     border-bottom: solid 1px #e6e6e6;
+    padding: 0;
   }
 
   .header-element {
@@ -232,7 +230,17 @@ export default class App extends Vue {
     padding-top: 2px;
   }
 
+  .body {
+    height: calc(100% - 61px);
+    margin-top: 0;
+  }
+
   .sidebar {
+    height: 100%;
+  }
+
+  .side-menu {
+    height: calc(100% - 50px);
     /*background: #e6e6e6;*/
   }
 
@@ -241,15 +249,13 @@ export default class App extends Vue {
     min-height: 400px;
   }
 
-  .sidebar-icon {
-    font-size: 16px;
-    padding-bottom: 3px;
-    margin: 0 8px;
-  }
-
   .sidebar-footer {
-    padding-bottom: 16px;
+    padding: 16px 0;
     border-right: solid 1px #e6e6e6;
     /*background: #e6e6e6;*/
+  }
+
+  .main-content {
+    min-height: 100%;
   }
 </style>

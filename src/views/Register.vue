@@ -168,7 +168,7 @@ export default class Register extends Vue {
 <style lang="scss" scoped>
   .center-container {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     display: flex;
     display: -webkit-flex;
     flex-direction: column;

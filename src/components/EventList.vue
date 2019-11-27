@@ -1,11 +1,11 @@
 <template>
   <div class="root">
-    <span :class="{ 'first-item': index === 0, 'item': index !== 0 }"
-      v-for="(item, index) in data" :key="index" @click="handleListItemClick(index)">
-      <el-card class="box-card clickable" shadow="hover">
-        <div slot="header" class="list-title">
+    <span :class="{ 'first-item': index === 0, 'other-item': index !== 0 }" class="item clickable"
+          @click="handleListItemClick(index)" v-for="(item, index) in data" :key="index">
+      <el-card shadow="hover">
+        <div slot="header" class="list-title" style="clear: both">
           <span>{{ item.title }}</span>
-          <span>最新</span>
+          <el-tag v-if="index === 0" class="latest-tag">最新</el-tag>
         </div>
 
         <div class="list-content">
@@ -34,7 +34,11 @@ export default class EventList extends Vue {
     }
 }
 </script>
-
+<style lang="scss">
+  .el-card__header {
+    padding: 0;
+  }
+</style>
 <style lang="scss" scoped>
   .root {
     display: flex;
@@ -44,33 +48,39 @@ export default class EventList extends Vue {
     justify-content: space-between;
     /*align-items: center;*/
     /*align-content: space-between;*/
-    span {
-      margin-bottom: 16px;
-      &:last-child {
-         margin-bottom: 0;
-      }
-    }
   }
 
-  .root span {
-    max-width: 960px;
+  .latest-tag {
+    @extend .text-right;
+  }
+
+  .item {
+    margin-bottom: 16px;
+    &:last-child {
+      /*margin-bottom: 0;*/
+    }
   }
 
   .first-item {
     width: 100%;
   }
 
-  .item {
+  .other-item {
     width: 49%;
-  }
-
-  .box-card {
+    max-width: 480px;
   }
 
   .list-title {
-    @extend .text-color-accent;
     @extend .text-left;
     @extend .text-main-title;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 18px 20px;
+    color: $--color-primary-light-9;
+    background: $--color-primary;
   }
 
   .list-content {

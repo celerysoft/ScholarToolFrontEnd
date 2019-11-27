@@ -36,13 +36,11 @@ export default new Vuex.Store({
       state.jwt = jwt;
     },
     [MutationTypes.LOGIN](state, payload: LoginPayload) {
-      console.log(state);
       state.isLogin = true;
       state.userStatus = payload.status;
       state.username = payload.username;
       state.email = payload.email;
       state.uuid = payload.uuid;
-      console.log(state);
     },
     [MutationTypes.LOGOUT](state) {
       state.isLogin = false;

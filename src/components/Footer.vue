@@ -1,18 +1,20 @@
 <template>
   <div class="footer">
-    <div class="text-body">
+    <div class="power-by">
       Powered by
-      <el-button type="text" @click="turnToCelerySoftWebsite">
+      <el-link type="primary" @click="turnToCelerySoftWebsite">
         Celery Soft
-      </el-button>
-      <el-button type="text" @click="turnToVueJsWebsite">
+      </el-link>
+      &
+      <el-link type="primary" @click="turnToVueJsWebsite">
         Vue.js
-      </el-button>
-      <el-button type="text" @click="turnToElementWebsite">
+      </el-link>
+      &
+      <el-link type="primary" @click="turnToElementWebsite">
         Element
-      </el-button>
+      </el-link>
     </div>
-    <div class="text-body">
+    <div class="copyright">
       Copyright © 2017-2020
       <el-button type="text" @click="turnToWebsite">
         www.celerysoft.science
@@ -48,6 +50,15 @@ export default class Footer extends Vue {
 <style lang="scss" scoped>
   .footer {
     @extend .text-color-primary;
+    @extend .text-body;
     text-align: center;
+  }
+
+  .power-by {
+    margin-top: 8px;
+  }
+
+  .copyright {
+    margin-top: 16px;
   }
 </style>
