@@ -37,6 +37,11 @@ const routes = [
     name: '个人信息',
     component: () => import('@/views/Account.vue'),
   },
+  {
+    path: '/activation/',
+    name: '激活账户',
+    component: () => import('@/views/Activation.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',
@@ -57,10 +62,18 @@ function isLogin(): boolean {
   return store.getters.isLogin;
 }
 
-const urlsWithoutLogin = ['/login/', '/register/'];
+const urlsForbiddenIfLogin = ['/login/', '/register/'];
+
+const urlsWithoutLogin = Object.assign(urlsForbiddenIfLogin, ['/activation', '/activation/']);
 
 function isUrlNeedLogin(url: string): boolean {
   return urlsWithoutLogin.indexOf(url) === -1;
+}
+
+function isUrlForbiddenForLoginUser(url: string): boolean {
+  console.log(url);
+  console.log(urlsForbiddenIfLogin.indexOf(url));
+  return urlsForbiddenIfLogin.indexOf(url) !== -1;
 }
 
 router.beforeEach((to: Route, from: Route, next) => {
@@ -72,7 +85,7 @@ router.beforeEach((to: Route, from: Route, next) => {
     next('/login/');
   }
 
-  if (isLogin() && !isUrlNeedLogin(to.path)) {
+  if (isLogin() && isUrlForbiddenForLoginUser(to.path)) {
     next(from.path);
   }
 

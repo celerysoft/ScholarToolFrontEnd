@@ -78,7 +78,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="passwordDialogVisible = false">取 消</el-button>
+          <el-button @click="cancelModifyPasswordDialog">取 消</el-button>
           <el-button type="primary" @click="modifyPassword">确 定</el-button>
         </div>
       </el-dialog>
@@ -167,6 +167,11 @@ export default class Account extends Vue {
     this.confirmPassword = '';
   }
 
+  cancelModifyPasswordDialog() {
+    this.closeModifyPasswordDialog();
+    this.resetModifyPasswordDialog();
+  }
+
   modifyPassword() {
     const oldPassword = this.oldPassword.trim();
     const newPassword = this.newPassword.trim();
@@ -217,8 +222,6 @@ export default class Account extends Vue {
         });
         this.resetModifyPasswordDialog();
         this.closeModifyPasswordDialog();
-      }).catch((error) => {
-        console.log(error);
       });
   }
 }

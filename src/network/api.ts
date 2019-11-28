@@ -119,7 +119,7 @@ class Api {
   }
 
   public activateAccount(jwt: string): AxiosPromise {
-    return this.axios.patch(this.REGISTER_URL, {
+    return this.axios.put(this.USER_INFORMATION_URL, {
       jwt,
     });
   }
