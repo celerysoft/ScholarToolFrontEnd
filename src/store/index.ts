@@ -17,6 +17,7 @@ export default new Vuex.Store({
     email: '',
     userStatus: UserStatus.WaitingActivation,
     uuid: '',
+    registerDate: '',
     isLogin: false,
     activatedMenuIndex: '0',
   },
@@ -35,12 +36,15 @@ export default new Vuex.Store({
     [MutationTypes.ON_RECEIVED_JWT](state, jwt: string) {
       state.jwt = jwt;
     },
-    [MutationTypes.LOGIN](state, payload: LoginPayload) {
-      state.isLogin = true;
+    [MutationTypes.ON_RECEIVED_USER_INFORMATION](state, payload: LoginPayload) {
       state.userStatus = payload.status;
       state.username = payload.username;
       state.email = payload.email;
       state.uuid = payload.uuid;
+      state.registerDate = payload.registerDate;
+    },
+    [MutationTypes.LOGIN](state) {
+      state.isLogin = true;
     },
     [MutationTypes.LOGOUT](state) {
       state.isLogin = false;
@@ -72,6 +76,7 @@ export default new Vuex.Store({
     username: state => state.username,
     email: state => state.email,
     userStatus: state => state.userStatus,
+    registerDate: state => state.registerDate,
     activatedMenuIndex: state => state.activatedMenuIndex,
   },
   plugins: [createPersistedState()],

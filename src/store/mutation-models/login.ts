@@ -8,6 +8,8 @@ export default class LoginPayload {
 
   private _uuid: string;
 
+  private _registerDate: string;
+
   get status(): number {
     return this._status;
   }
@@ -40,10 +42,19 @@ export default class LoginPayload {
     this._uuid = value;
   }
 
-  constructor(status: number, username: string, email: string, uuid: string) {
+  get registerDate(): string {
+    return this._registerDate;
+  }
+
+  set registerDate(value: string) {
+    this._registerDate = value;
+  }
+
+  constructor(status: number, username: string, email: string, uuid: string, registerDate: string) {
     this._status = status;
     this._username = username;
     this._email = email;
     this._uuid = uuid;
+    this._registerDate = registerDate;
   }
 }

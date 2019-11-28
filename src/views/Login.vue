@@ -25,6 +25,7 @@ import { Route } from 'vue-router';
 import Api from '@/network/api';
 import MutationTypes from '@/store/mutation-types';
 import LoginPayload from '@/store/mutation-models/login';
+import formatUserApiResponse, { UserResponse, UserApiResponse } from '@/network/response/user';
 
 @Component({
   components: {},
@@ -94,10 +95,19 @@ export default class Login extends Vue {
         this.$store.commit(MutationTypes.ON_RECEIVED_JWT, jwt);
         Api.getSelfInformation()
           .then((userApiResponse) => {
-            const { uuid, email, status } = userApiResponse.data;
+            const user: UserResponse = formatUserApiResponse(
+                userApiResponse.data as UserApiResponse,
+            );
+            const {
+              uuid, email, status, registerDate,
+            } = user;
 
-            const payload: LoginPayload = new LoginPayload(status, username, email, uuid);
-            this.$store.commit(MutationTypes.LOGIN, payload);
+            const payload: LoginPayload = new LoginPayload(
+              status, username, email, uuid, registerDate,
+            );
+            this.$store.commit(MutationTypes.ON_RECEIVED_USER_INFORMATION, payload);
+
+            this.$store.commit(MutationTypes.LOGIN);
 
             this.$message({
               showClose: true,

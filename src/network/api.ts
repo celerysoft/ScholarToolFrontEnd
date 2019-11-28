@@ -18,6 +18,8 @@ class Api {
 
   readonly PASSWORD_URL: string = 'user/password';
 
+  readonly EMAIL_URL: string = 'user/email';
+
   readonly EVENT_URL: string = 'event';
 
   private axios: AxiosInstance;
@@ -47,6 +49,7 @@ class Api {
       },
       error => Promise.reject(error),
     );
+
     this.axios.interceptors.response.use(
       (response) => {
         if (response.config.loadingAnimation) {
@@ -69,12 +72,6 @@ class Api {
             });
 
             store.commit(MutationTypes.LOGOUT);
-            // router.push({
-            //   path: '/login/',
-            //   query: {
-            //     next: router.currentRoute.path,
-            //   },
-            // });
           }
           error.message = error.response.data.message;
         } else if (error.request) {
@@ -128,7 +125,7 @@ class Api {
   }
 
   public sendActivationEmail(): AxiosPromise {
-    return this.axios.get(this.REGISTER_URL, {
+    return this.axios.patch(this.EMAIL_URL, null, {
       showError: true,
     });
   }
@@ -140,9 +137,9 @@ class Api {
   }
 
   public modifyPassword(oldPassword: string, newPassword: string): AxiosPromise {
-    return this.axios.patch(this.PASSWORD_URL, {
+    return this.axios.put(this.PASSWORD_URL, {
       old_password: oldPassword,
-      new_password: newPassword,
+      password: newPassword,
     }, {
       showError: true,
     });

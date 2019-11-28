@@ -5,6 +5,8 @@ export default class MutationTypes {
 
   public static ON_RECEIVED_JWT: string = 'onReceivedJwt';
 
+  public static ON_RECEIVED_USER_INFORMATION: string = 'onReceivedUserInformation';
+
   public static LOGIN: string = 'login';
 
   public static LOGOUT: string = 'logout';

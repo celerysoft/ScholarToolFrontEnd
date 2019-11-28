@@ -17,6 +17,6 @@ export interface EventExResponse extends EventResponse {
 
 export default function getEventExFromEvent(event: EventResponse): EventExResponse {
   const date = new Date(event.created_at);
-  const createAt = `${date.getFullYear()}年${date.getMonth()}月${date.getDay()}日`;
+  const createAt = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
   return Object.assign(event, { createAt });
 }
