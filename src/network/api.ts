@@ -10,11 +10,9 @@ const Axios = require('axios');
 class Api {
   readonly TODAY_IN_HISTORY_URL: string = 'today-in-history';
 
-  readonly REGISTER_URL: string = 'register';
-
   readonly LOGIN_URL: string = 'login';
 
-  readonly USER_INFORMATION_URL: string = 'user';
+  readonly USER_URL: string = 'user';
 
   readonly PASSWORD_URL: string = 'user/password';
 
@@ -108,18 +106,20 @@ class Api {
     });
   }
 
-  public register(username: string, email: string, password: string): AxiosPromise {
-    return this.axios.post(this.REGISTER_URL, {
+  public register(username: string, email: string,
+    password: string, invitationCode: string): AxiosPromise {
+    return this.axios.post(this.USER_URL, {
       username,
       email,
       password,
+      invitation_code: invitationCode,
     }, {
       showError: true,
     });
   }
 
   public activateAccount(jwt: string): AxiosPromise {
-    return this.axios.put(this.USER_INFORMATION_URL, {
+    return this.axios.put(this.USER_URL, {
       jwt,
     });
   }
@@ -131,7 +131,7 @@ class Api {
   }
 
   public getSelfInformation(): AxiosPromise {
-    return this.axios.get(this.USER_INFORMATION_URL, {
+    return this.axios.get(this.USER_URL, {
       showError: true,
     });
   }

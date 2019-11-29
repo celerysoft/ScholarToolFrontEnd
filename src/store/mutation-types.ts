@@ -1,8 +1,6 @@
 export default class MutationTypes {
   public static ACTIVATION: string = 'activation';
 
-  public static REGISTER: string = 'register';
-
   public static ON_RECEIVED_JWT: string = 'onReceivedJwt';
 
   public static ON_RECEIVED_USER_INFORMATION: string = 'onReceivedUserInformation';

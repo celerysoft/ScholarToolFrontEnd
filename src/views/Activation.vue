@@ -4,12 +4,12 @@
     <div class="content"
          v-loading="isActivating" element-loading-background="rgba(255, 255, 255, 1)">
       <div v-if="isActivated">
-        <div>您的账户{{ username }}已经成功激活，欢迎您成为Celery Soft的文件中转站的用户</div>
+        <div>您的账户{{ username }}已经成功激活，欢迎您成为Celery Soft学术的用户</div>
         <p>
-          在<el-button type="text" @click="turnToMyFile">我的文件</el-button>栏目，可以进行文件管理操作
+          在<el-button type="text" @click="turnToScholar">学术</el-button>栏目，可以进行学术服务管理操作
         </p>
         <p>
-          在<el-button type="text" @click="turnToMySharing">我的分享</el-button>栏目，可以管理自己分享出去的文件
+          在<el-button type="text" @click="turnToEvent">公告</el-button>栏目，可以查看网站公告
         </p>
         <p>
           在<el-button type="text" @click="turnToMyInformation">个人信息</el-button>栏目，可以查看个人信息，进行修改密码等操作
@@ -110,12 +110,12 @@ export default class Activation extends Vue {
       });
   }
 
-  private turnToMyFile() {
-    this.$router.push('/file/');
+  private turnToScholar() {
+    this.$router.push('/service/');
   }
 
-  private turnToMySharing() {
-    this.$router.push('/sharing/');
+  private turnToEvent() {
+    this.$router.push('/event/');
   }
 
   private turnToMyInformation() {

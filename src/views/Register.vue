@@ -54,7 +54,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 import Api from '@/network/api';
 import MutationTypes from '@/store/mutation-types';
-import RegisterPayload from '@/store/mutation-models/register';
+import formatUserApiResponse, { UserResponse, UserApiResponse } from '@/network/response/user';
+import LoginPayload from '@/store/mutation-models/login';
 
 @Component({
   components: {},
@@ -113,11 +114,12 @@ export default class Register extends Vue {
     this.$router.push('/login/');
   }
 
-  private doRegister() {
+  private async doRegister() {
     const username = this.username.trim();
     const email = this.email.trim();
     const password = this.password.trim();
     const confirmPassword = this.confirmPassword.trim();
+    const invitationCode = this.invitationCode.trim();
 
     if (email.length === 0) {
       this.$message({
@@ -146,12 +148,36 @@ export default class Register extends Vue {
       return;
     }
 
-    Api.register(username, email, password)
-      .then((response) => {
-        const { uuid, jwt } = response.data;
+    if (invitationCode.length === 0) {
+      this.$message({
+        showClose: true,
+        message: '请输入邀请码',
+        type: 'warning',
+      });
+      return;
+    }
 
-        const payload: RegisterPayload = new RegisterPayload(jwt, username, email, uuid);
-        this.$store.commit(MutationTypes.REGISTER, payload);
+    await Api.register(username, email, password, invitationCode)
+      .then((response) => {
+        const { jwt } = response.data;
+        this.$store.commit(MutationTypes.ON_RECEIVED_JWT, jwt);
+      });
+
+    await Api.getSelfInformation()
+      .then((userApiResponse) => {
+        const user: UserResponse = formatUserApiResponse(
+                userApiResponse.data as UserApiResponse,
+        );
+        const {
+          uuid, status, registerDate,
+        } = user;
+
+        const payload: LoginPayload = new LoginPayload(
+          status, username, email, uuid, registerDate,
+        );
+        this.$store.commit(MutationTypes.ON_RECEIVED_USER_INFORMATION, payload);
+
+        this.$store.commit(MutationTypes.LOGIN);
 
         this.$message({
           showClose: true,

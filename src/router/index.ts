@@ -18,6 +18,11 @@ const routes = [
     component: () => import('@/views/Register.vue'),
   },
   {
+    path: '/register/activation/',
+    name: '等待账户激活',
+    component: () => import('@/views/ActivationHint.vue'),
+  },
+  {
     path: '/',
     name: '主页',
     component: Home,
@@ -64,15 +69,14 @@ function isLogin(): boolean {
 
 const urlsForbiddenIfLogin = ['/login/', '/register/'];
 
-const urlsWithoutLogin = Object.assign(urlsForbiddenIfLogin, ['/activation', '/activation/']);
+const urlsWithoutLogin = ['/activation', '/activation/']
+  .concat(urlsForbiddenIfLogin);
 
 function isUrlNeedLogin(url: string): boolean {
   return urlsWithoutLogin.indexOf(url) === -1;
 }
 
 function isUrlForbiddenForLoginUser(url: string): boolean {
-  console.log(url);
-  console.log(urlsForbiddenIfLogin.indexOf(url));
   return urlsForbiddenIfLogin.indexOf(url) !== -1;
 }
 

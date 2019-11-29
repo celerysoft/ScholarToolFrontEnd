@@ -16,6 +16,9 @@
       <el-button @click="reset">重置</el-button>
       <el-button @click="doLogin" type="primary">登录</el-button>
     </div>
+    <div class="text-body register-hint">
+      还没有账号？请先<el-button class="text-body" type="text" @click="goRegister">注册</el-button>
+    </div>
   </div>
 </template>
 
@@ -121,6 +124,10 @@ export default class Login extends Vue {
           });
       });
   }
+
+  goRegister() {
+    this.$router.push('/register/');
+  }
 }
 </script>
 
@@ -142,5 +149,9 @@ export default class Login extends Vue {
 
   .login-button-group {
     margin-top: 8px;
+  }
+
+  .register-hint {
+    margin-top: 16px;
   }
 </style>
