@@ -7,7 +7,7 @@
           <div class="card-title"><strong>个人资料</strong></div>
           <div class="card-subtitle">使用 Celery Soft 学术服务的其他用户可能会看到部分信息。</div>
         </div>
-        <div class="text item">
+        <div class="">
           <el-row>
             <el-col class="list-title" :span="4">用户名</el-col>
             <el-col class="list-text" :span="8">{{ username }}</el-col>
@@ -23,7 +23,7 @@
         <div slot="header">
           <div class="card-title">联系信息</div>
         </div>
-        <div class="text item">
+        <div class="">
           <el-row>
             <el-col class="list-title" :span="4">电子邮箱</el-col>
             <el-col class="list-text" :span="8">{{ email }}</el-col>
@@ -47,7 +47,7 @@
         <div slot="header">
           <div class="card-title">账号信息</div>
         </div>
-        <div class="text item">
+        <div class="">
           <el-row>
             <el-col class="list-title" :span="4">密码</el-col>
             <el-col class="list-text" :span="8">********</el-col>

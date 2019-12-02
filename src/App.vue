@@ -60,8 +60,8 @@
           <span v-else>©</span>
         </div>
       </el-aside>
-      <el-main class="main-content">
-        <router-view v-loading="isLoading"/>
+      <el-main class="main-content" ref="mainContentView" @scroll.native.passive="onScroll">
+        <router-view ref="routerView" v-loading="isLoading"/>
 
         <el-dialog
           title="提示"
@@ -74,6 +74,24 @@
             <el-button type="primary" @click="logout">确 定</el-button>
           </span>
         </el-dialog>
+
+        <float-action-button :is-sidebar-collapse="isCollapse">
+          <slot>
+            <transition name="fade">
+              <div v-if="goTopButtonVisible" class="back-to-top-button">
+                <el-tooltip content="返回顶部" placement="bottom" effect="dark">
+                  <el-button type="info" icon="el-icon-arrow-up" @click="goTop" circle></el-button>
+                </el-tooltip>
+              </div>
+            </transition>
+            <div class="return-button">
+              <el-tooltip content="返回上级" placement="bottom" effect="dark">
+                <el-button type="primary" icon="el-icon-back" @click="goBack" circle
+                           :disabled="goBackButtonDisabled"></el-button>
+              </el-tooltip>
+            </div>
+          </slot>
+        </float-action-button>
       </el-main>
     </el-container>
   </el-container>
@@ -82,12 +100,14 @@
 <script lang="ts">
 import { Route } from 'vue-router';
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import HeaderDivider from './components/HeaderDivider.vue';
-import MutationTypes from './store/mutation-types';
+import HeaderDivider from '@/components/HeaderDivider.vue';
+import FloatActionButton from '@/components/FloatActionButton.vue';
+import MutationTypes from '@/store/mutation-types';
 
 @Component({
   components: {
     HeaderDivider,
+    FloatActionButton,
   },
 })
 
@@ -98,11 +118,15 @@ export default class App extends Vue {
 
     logoutDialogVisible: boolean;
 
-    // @Watch('$route')
-    // onRouteChanged(to: Route, from: Route) {
-    //   // console.log(from);
-    //   // console.log(to);
-    // }
+    // goTopButtonVisible: boolean = this.$store.state.goTopButtonVisible;
+    goTopButtonVisible: boolean = false;
+
+    // goBackButtonDisabled: boolean = this.$store.state.goBackButtonDisabled;
+    goBackButtonDisabled:boolean = false;
+
+    timer?: number;
+
+    isGoingTop: boolean = false;
 
     get isLogin() {
       return this.$store.getters.isLogin;
@@ -124,14 +148,17 @@ export default class App extends Vue {
     }
 
     backToHomepage() {
-      this.$router.push('/');
+      if (this.isLogin) {
+        this.$router.push('/');
+      } else if (!this.isLogin && this.$route.path !== '/login/') {
+        this.$router.push('/login/');
+      }
     }
 
     toggleSidebar() {
       if (this.isLogin) {
-        // noop
+        this.isCollapse = !this.isCollapse;
       }
-      this.isCollapse = !this.isCollapse;
     }
 
     handleOpen() {
@@ -144,6 +171,56 @@ export default class App extends Vue {
 
     showLogoutDialog() {
       this.logoutDialogVisible = true;
+    }
+
+    goBack() {
+      console.log(window.history);
+      // eslint-disable-next-line no-unused-expressions
+      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
+    }
+
+    goTop() {
+      // speedFactor越大滚动速度越大
+      const speedFactor = 100;
+      const scrollFrequency = 25;
+
+      this.isGoingTop = true;
+      this.timer = setInterval(() => {
+        // const scrollY = window.pageYOffset
+        //     || document.documentElement.scrollTop || document.body.scrollTop;
+        const view: Vue = this.$refs.mainContentView as Vue;
+        const scrollY = view.$el.scrollTop;
+        let speed = 0;
+        if (scrollY <= speedFactor) {
+          speed = -scrollY;
+        } else {
+          speed = -Math.floor(scrollY / speedFactor);
+          speed = Math.abs(speed) > speedFactor ? speed : -speedFactor;
+        }
+
+        // eslint-disable-next-line no-multi-assign
+        view.$el.scrollTop = scrollY + speed;
+        // document.documentElement.scrollTop = document.body.scrollTop = scrollY + speed;
+
+        if (scrollY <= 0) {
+          this.isGoingTop = false;
+          clearInterval(this.timer);
+        }
+      }, scrollFrequency);
+    }
+
+    onScroll() {
+      // const scrollY = window.pageYOffset
+      //     || document.documentElement.scrollTop || document.body.scrollTop;
+      const view: Vue = this.$refs.mainContentView as Vue;
+      const scrollY = view.$el.scrollTop;
+      const { clientHeight } = document.documentElement;
+      this.goTopButtonVisible = scrollY > clientHeight / 2;
+
+      if (this.isGoingTop && scrollY <= 0) {
+        this.isGoingTop = false;
+        clearInterval(this.timer);
+      }
     }
 
     logout() {
@@ -257,5 +334,9 @@ export default class App extends Vue {
 
   .main-content {
     min-height: 100%;
+  }
+
+  .return-button {
+    margin-top: 16px;
   }
 </style>

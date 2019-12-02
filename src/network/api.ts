@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { Message } from 'element-ui';
 import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
-// import router from '@/router/index';
 import store from '@/store/index';
 import MutationTypes from '@/store/mutation-types';
 
@@ -94,6 +93,7 @@ class Api {
   public getTodayInHistory(): AxiosPromise {
     return this.axios.get(this.TODAY_IN_HISTORY_URL, {
       showError: true,
+      loadingAnimation: true,
     });
   }
 
@@ -148,6 +148,7 @@ class Api {
   public getEvents(): AxiosPromise {
     return this.axios.get(this.EVENT_URL, {
       showError: true,
+      loadingAnimation: true,
     });
   }
 
@@ -157,6 +158,7 @@ class Api {
         uuid,
       },
       showError: true,
+      loadingAnimation: true,
     });
   }
 }
