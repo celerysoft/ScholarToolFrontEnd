@@ -31,8 +31,6 @@ export default class ActivationHint extends Vue {
   }
 
   get isUserActivated(): boolean {
-    console.log(this.$store.getters.userStatus);
-    console.log(typeof this.$store.getters.userStatus);
     return this.$store.getters.userStatus !== 0;
   }
 

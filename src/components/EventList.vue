@@ -1,8 +1,8 @@
 <template>
-  <div class="root">
+  <div class="event-list-root">
     <span :class="{ 'first-item': index === 0, 'other-item': index !== 0 }" class="item clickable"
           @click="handleListItemClick(index)" v-for="(item, index) in data" :key="index">
-      <el-card shadow="hover">
+      <el-card shadow="hover" class="el-card__header">
         <div slot="header" class="list-title" style="clear: both">
           <span>{{ item.title }}</span>
           <el-tag v-if="index === 0" class="latest-tag">最新</el-tag>
@@ -35,12 +35,14 @@ export default class EventList extends Vue {
 }
 </script>
 <style lang="scss">
-  .el-card__header {
-    padding: 0;
+  .event-list-root {
+    .el-card__header {
+      padding: 0;
+    }
   }
 </style>
 <style lang="scss" scoped>
-  .root {
+  .event-list-root {
     display: flex;
     display: -webkit-flex;
     flex-direction: row;

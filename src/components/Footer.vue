@@ -55,7 +55,7 @@ export default class Footer extends Vue {
   }
 
   .power-by {
-    margin-top: 8px;
+    margin-top: 16px;
   }
 
   .copyright {

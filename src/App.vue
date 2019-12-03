@@ -174,7 +174,6 @@ export default class App extends Vue {
     }
 
     goBack() {
-      console.log(window.history);
       // eslint-disable-next-line no-unused-expressions
       window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
     }
@@ -333,7 +332,7 @@ export default class App extends Vue {
   }
 
   .main-content {
-    min-height: 100%;
+    height: 100%;
   }
 
   .return-button {

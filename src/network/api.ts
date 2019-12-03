@@ -19,6 +19,8 @@ class Api {
 
   readonly EVENT_URL: string = 'event';
 
+  readonly SERVICE_URL: string = 'service';
+
   private axios: AxiosInstance;
 
   constructor() {
@@ -157,6 +159,13 @@ class Api {
       params: {
         uuid,
       },
+      showError: true,
+      loadingAnimation: true,
+    });
+  }
+
+  public getUserServices(): AxiosPromise {
+    return this.axios.get(this.SERVICE_URL, {
       showError: true,
       loadingAnimation: true,
     });

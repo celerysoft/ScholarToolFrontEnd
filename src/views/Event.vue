@@ -54,7 +54,7 @@ export default class Event extends Vue {
     onEventClick(index: number) {
       const { uuid } = this.events[index];
       this.$router.push({
-        path: `/event/${uuid}`,
+        path: `/event/${uuid}/`,
       });
     }
 }

@@ -47,6 +47,11 @@ const routes = [
     name: '激活账户',
     component: () => import('@/views/Activation.vue'),
   },
+  {
+    path: '/service/',
+    name: '我的学术服务',
+    component: () => import('@/views/Service.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',
