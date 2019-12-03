@@ -23,8 +23,8 @@
             </div>
             <div>
               <span>连接密码</span>
-              <span class="clickable text-color-accent" @click="toggleConnectingPassword">
-                <span v-if="showConnectingPassword">{{ service.password }}</span>
+              <span class="clickable text-color-accent" @click="toggleConnectionPassword">
+                <span v-if="connectionPasswordVisible">{{ service.password }}</span>
                 <span v-else>点击查看</span>
               </span>
             </div>
@@ -38,7 +38,8 @@
             </div>
             <div>
               <span class="placeholder"></span>
-              <el-button type="primary" class="btn-modify-connecting-password" plain>
+              <el-button type="primary" class="btn-modify-connection-password" plain
+                         @click="openConnectionPasswordDialog">
                 修改连接密码
               </el-button>
               <span class="placeholder"></span>
@@ -66,12 +67,12 @@
             </div>
             <div>
               <span class="placeholder"></span>
-              <el-button type="primary" class="btn-modify-connecting-password" plain>
+              <el-button type="primary" class="btn-renew" plain>
                 续费
               </el-button>
               <span class="placeholder"></span>
               <el-button v-if="isMonthlyService" type="primary"
-                         class="btn-modify-connecting-password" plain>
+                         class="btn-modify-auto-renew" plain>
                 修改自动续费
               </el-button>
               <span class="placeholder" v-if="isMonthlyService"></span>
@@ -144,6 +145,22 @@
       </el-col>
     </el-row>
 
+    <!-- 修改连接密码 -->
+    <el-dialog title="修改连接密码" width="400px" :visible.sync="connectionPasswordDialogVisible">
+      <el-form label-position="left">
+        <el-form-item label="新密码" label-width="80px">
+          <el-input v-model="password" type="password" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" label-width="80px">
+          <el-input v-model="confirmPassword" type="password" show-password></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeConnectionPasswordDialog">取 消</el-button>
+        <el-button type="primary" @click="modifyConnectionPassword">确 定</el-button>
+      </div>
+    </el-dialog>
+
     <div class="placeholder"></div>
     <Footer></Footer>
   </div>
@@ -170,7 +187,13 @@ export default class ServiceDetail extends Vue {
 
   service: ServiceResponse | null = null;
 
-  showConnectingPassword: boolean = false;
+  connectionPasswordVisible: boolean = false;
+
+  connectionPasswordDialogVisible: boolean = false;
+
+  password: string = '';
+
+  confirmPassword: string = '';
 
   // eslint-disable-next-line class-methods-use-this
   get percentage(): number {
@@ -213,13 +236,64 @@ export default class ServiceDetail extends Vue {
       });
   }
 
-  toggleConnectingPassword() {
-    this.showConnectingPassword = !this.showConnectingPassword;
+  toggleConnectionPassword() {
+    this.connectionPasswordVisible = !this.connectionPasswordVisible;
   }
 
   // eslint-disable-next-line class-methods-use-this
   formatProgress(percentage: number) {
     return `${percentage}%`;
+  }
+
+  resetConnectionPasswordDialog() {
+    this.password = '';
+    this.confirmPassword = '';
+  }
+
+  openConnectionPasswordDialog() {
+    this.resetConnectionPasswordDialog();
+    this.connectionPasswordDialogVisible = true;
+  }
+
+  closeConnectionPasswordDialog() {
+    this.connectionPasswordDialogVisible = false;
+  }
+
+  modifyConnectionPassword() {
+    const password: string = this.password.trim();
+    const confirmPassword: string = this.confirmPassword.trim();
+
+    if (password.length === 0) {
+      this.$message({
+        showClose: true,
+        message: '请输入新密码',
+        type: 'warning',
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      this.$message({
+        showClose: true,
+        message: '两次输入的密码不一致',
+        type: 'error',
+      });
+      return;
+    }
+
+    Api.modifyServicePassword(this.serviceUuid as string, password).then((response) => {
+      this.$message({
+        showClose: true,
+        message: '服务连接密码修改成功',
+        type: 'success',
+      });
+
+      if (this.service) {
+        this.service.password = password;
+      }
+
+      this.closeConnectionPasswordDialog();
+    });
   }
 }
 </script>
@@ -285,7 +359,7 @@ export default class ServiceDetail extends Vue {
     }
   }
 
-  .btn-modify-connecting-password {
+  .btn-modify-connection-password {
     align-self: center;
   }
 

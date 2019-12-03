@@ -21,6 +21,8 @@ class Api {
 
   readonly SERVICE_URL: string = 'service';
 
+  readonly SERVICE_PASSWORD_URL: string = 'service/password';
+
   private axios: AxiosInstance;
 
   constructor() {
@@ -178,6 +180,15 @@ class Api {
       params: {
         uuid,
       },
+    });
+  }
+
+  public modifyServicePassword(uuid: string, password: string): AxiosPromise {
+    return this.axios.put(this.SERVICE_PASSWORD_URL, {
+      uuid, password,
+    }, {
+      showError: true,
+      loadingAnimation: true,
     });
   }
 }
