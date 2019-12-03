@@ -170,6 +170,16 @@ class Api {
       loadingAnimation: true,
     });
   }
+
+  public getService(uuid: string): AxiosPromise {
+    return this.axios.get(this.SERVICE_URL, {
+      showError: true,
+      loadingAnimation: true,
+      params: {
+        uuid,
+      },
+    });
+  }
 }
 
 export default new Api();

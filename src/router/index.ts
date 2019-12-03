@@ -33,7 +33,7 @@ const routes = [
     component: () => import('@/views/Event.vue'),
   },
   {
-    path: '/event/:uuid',
+    path: '/event/:uuid/',
     name: '公告详情',
     component: () => import('@/views/EventDetail.vue'),
   },
@@ -51,6 +51,11 @@ const routes = [
     path: '/service/',
     name: '我的学术服务',
     component: () => import('@/views/Service.vue'),
+  },
+  {
+    path: '/service/:uuid/',
+    name: '学术服务详情',
+    component: () => import('@/views/ServiceDetail.vue'),
   },
   // {
   //   path: '/about',

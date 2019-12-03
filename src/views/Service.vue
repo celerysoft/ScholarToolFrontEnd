@@ -17,7 +17,7 @@
           width="240">
         </el-table-column>
         <el-table-column
-          prop="balance"
+          prop="balanceDescription"
           label="剩余学术点"
           width="240">
         </el-table-column>
