@@ -62,7 +62,7 @@
       <p class="text-body" style="margin-top: 64px;">如果您想中止在 Celery Soft 学术的服务，可以尝试停用账号。
         <el-button type="text">了解详情</el-button>
       </p>
-      <el-button type="danger">停用账号</el-button>
+      <el-button class="btn-suspend-account" type="danger">停用账号</el-button>
 
       <!-- 修改密码 -->
       <el-dialog title="修改密码" width="600px" :visible.sync="passwordDialogVisible">
@@ -83,6 +83,8 @@
         </div>
       </el-dialog>
 
+      <div class="placeholder"></div>
+      <Footer></Footer>
     </div>
 </template>
 
@@ -93,9 +95,10 @@ import LoginPayload from '@/store/mutation-models/login';
 import MutationTypes from '@/store/mutation-types';
 import { MenuIndex, UserStatus } from '@/toolkits/constant';
 import formatUserApiResponse, { UserApiResponse, UserResponse } from '@/network/response/user';
+import Footer from '@/components/Footer.vue';
 
 @Component({
-  components: {},
+  components: { Footer },
 })
 
 export default class Account extends Vue {
@@ -286,6 +289,10 @@ export default class Account extends Vue {
 
   .button {
     margin-top: 16px;
+  }
+
+  .btn-suspend-account {
+    margin-bottom: 64px;
   }
 
   .placeholder {

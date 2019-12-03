@@ -1,64 +1,69 @@
 <template>
-  <div class="center-container">
-    <el-form class="register-form" label-width="100px" label-position="right">
-      <el-form-item label="用户名">
-        <template v-slot:label>
-          <div class="form-label">用户名</div>
-        </template>
-        <el-input v-model="username"></el-input>
-      </el-form-item>
-      <el-form-item label="电子邮箱">
-        <template v-slot:label>
-          <div class="form-label">电子邮箱</div>
-        </template>
-        <el-input v-model="email"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <template v-slot:label>
-          <div class="form-label">密码</div>
-        </template>
-        <el-input v-model="password" @keyup.enter.native="doRegister"
-                  type="password" show-password>
-        </el-input>
-      </el-form-item>
-      <el-form-item label="确认密码">
-        <template v-slot:label>
-          <div class="form-label">确认密码</div>
-        </template>
-        <el-input v-model="confirmPassword" @keyup.enter.native="doRegister"
-                  type="password" show-password>
+  <div class="register">
+    <div class="placeholder"></div>
+    <div class="center-container">
+      <el-form class="register-form" label-width="100px" label-position="right">
+        <el-form-item label="用户名">
+          <template v-slot:label>
+            <div class="form-label">用户名</div>
+          </template>
+          <el-input v-model="username"></el-input>
+        </el-form-item>
+        <el-form-item label="电子邮箱">
+          <template v-slot:label>
+            <div class="form-label">电子邮箱</div>
+          </template>
+          <el-input v-model="email"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <template v-slot:label>
+            <div class="form-label">密码</div>
+          </template>
+          <el-input v-model="password" @keyup.enter.native="doRegister"
+                    type="password" show-password>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <template v-slot:label>
+            <div class="form-label">确认密码</div>
+          </template>
+          <el-input v-model="confirmPassword" @keyup.enter.native="doRegister"
+                    type="password" show-password>
 
-        </el-input>
-      </el-form-item>
-      <el-form-item label="邀请码">
-        <template v-slot:label>
-          <div class="form-label">邀请码</div>
-        </template>
-        <el-input v-model="invitationCode" @keyup.enter.native="doRegister"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="reset">重置</el-button>
-        <el-button @click="doRegister" type="primary">注册</el-button>
-      </el-form-item>
-    </el-form>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="邀请码">
+          <template v-slot:label>
+            <div class="form-label">邀请码</div>
+          </template>
+          <el-input v-model="invitationCode" @keyup.enter.native="doRegister"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="reset">重置</el-button>
+          <el-button @click="doRegister" type="primary">注册</el-button>
+        </el-form-item>
+      </el-form>
 
-    <div class="text-body" style="margin-left: 80px;">
-      已有账号？试试<el-button class="text-body" type="text" @click="goLogin">登录</el-button>
+      <div class="text-body" style="margin-left: 80px;">
+        已有账号？试试<el-button class="text-body" type="text" @click="goLogin">登录</el-button>
+      </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script lang="ts">
-/* eslint-disable no-trailing-spaces */
 import { Component, Vue } from 'vue-property-decorator';
-import { Route } from 'vue-router';
 import Api from '@/network/api';
 import MutationTypes from '@/store/mutation-types';
 import formatUserApiResponse, { UserResponse, UserApiResponse } from '@/network/response/user';
 import LoginPayload from '@/store/mutation-models/login';
+import Footer from '@/components/Footer.vue';
 
 @Component({
-  components: {},
+  components: {
+    Footer,
+  },
 })
 
 export default class Register extends Vue {
@@ -192,6 +197,17 @@ export default class Register extends Vue {
 </script>
 
 <style lang="scss" scoped>
+  .register {
+    margin: 0 auto;
+    min-height: 100%;
+    max-width: 960px;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .center-container {
     width: 100%;
     min-height: 100%;
@@ -209,5 +225,8 @@ export default class Register extends Vue {
   .form-label {
     @extend .text-subtitle;
     font-weight: bold;
+  }
+
+  .placeholder {
   }
 </style>

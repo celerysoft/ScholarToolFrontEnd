@@ -6,7 +6,7 @@
       <vue-markdown class="markdown">{{ event.content }}</vue-markdown>
     </div>
     <div class="placeholder"></div>
-<!--    <Footer></Footer>-->
+    <Footer></Footer>
   </div>
 </template>
 

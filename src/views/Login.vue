@@ -1,37 +1,43 @@
 <template>
-  <div class="center-container">
-    <div class="login-box">
-      <span>账号</span>
-      <el-input v-model="username" @keyup.enter.native="doLogin" type="text"
-                style="width: 360px; margin-left: 8px">
-      </el-input>
+  <div class="login">
+    <div class="placeholder"></div>
+    <div class="center-container">
+      <div class="login-box">
+        <span>账号</span>
+        <el-input v-model="username" @keyup.enter.native="doLogin" type="text"
+                  style="width: 360px; margin-left: 8px">
+        </el-input>
+      </div>
+      <div class="login-box">
+        <span>密码</span>
+        <el-input v-model="password" @keyup.enter.native="doLogin" type="password"
+                  style="width: 360px; margin-left: 8px">
+        </el-input>
+      </div>
+      <div class="login-button-group">
+        <el-button @click="reset">重置</el-button>
+        <el-button @click="doLogin" type="primary">登录</el-button>
+      </div>
+      <div class="text-body register-hint">
+        还没有账号？请先<el-button class="text-body" type="text" @click="goRegister">注册</el-button>
+      </div>
     </div>
-    <div class="login-box">
-      <span>密码</span>
-      <el-input v-model="password" @keyup.enter.native="doLogin" type="password"
-                style="width: 360px; margin-left: 8px">
-      </el-input>
-    </div>
-    <div class="login-button-group">
-      <el-button @click="reset">重置</el-button>
-      <el-button @click="doLogin" type="primary">登录</el-button>
-    </div>
-    <div class="text-body register-hint">
-      还没有账号？请先<el-button class="text-body" type="text" @click="goRegister">注册</el-button>
-    </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Route } from 'vue-router';
 import Api from '@/network/api';
 import MutationTypes from '@/store/mutation-types';
 import LoginPayload from '@/store/mutation-models/login';
 import formatUserApiResponse, { UserResponse, UserApiResponse } from '@/network/response/user';
+import Footer from '@/components/Footer.vue';
 
 @Component({
-  components: {},
+  components: {
+    Footer,
+  },
 })
 
 export default class Login extends Vue {
@@ -132,6 +138,17 @@ export default class Login extends Vue {
 </script>
 
 <style lang="scss" scoped>
+  .login {
+    margin: 0 auto;
+    min-height: 100%;
+    max-width: 960px;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .center-container {
     width: 100%;
     min-height: 100%;
@@ -153,5 +170,8 @@ export default class Login extends Vue {
 
   .register-hint {
     margin-top: 16px;
+  }
+
+  .placeholder {
   }
 </style>

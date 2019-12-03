@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { Message } from 'element-ui';
+import { Notification } from 'element-ui';
 import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 import store from '@/store/index';
 import MutationTypes from '@/store/mutation-types';
@@ -64,8 +64,8 @@ class Api {
 
         if (error.response) {
           if (error.response.status === 401) {
-            Message({
-              showClose: true,
+            Notification({
+              title: '登录过期',
               message: '登录已过期，请重新登录',
               type: 'info',
             });
@@ -80,8 +80,8 @@ class Api {
         }
 
         if (error.config.showError) {
-          Message({
-            showClose: true,
+          Notification({
+            title: '与服务器通信时发生错误',
             message: error.message,
             type: 'error',
           });
