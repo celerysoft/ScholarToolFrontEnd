@@ -15,7 +15,7 @@ export interface ServiceApiResponse {
 export interface ServiceResponse extends ServiceApiResponse {
   statusDescription: string;
 
-  balance: number;
+  balance: string;
 }
 
 function formatServiceStatus(status: number): string {
@@ -32,8 +32,13 @@ function formatServiceStatus(status: number): string {
   return statusDescription;
 }
 
-function calculateRemainingPackage(total: number, usage: number): number {
-  return total - usage;
+function calculateRemainingPackage(total: number, usage: number): string {
+  const balance: number = (total - usage) / (1024 * 1024);
+  if (balance < 1024) {
+    return `${balance.toFixed(2)} MB`;
+  }
+
+  return `${(balance / 1024).toFixed(2)} GB`;
 }
 
 export default function formatServiceApiResponse(service: ServiceApiResponse): ServiceResponse {

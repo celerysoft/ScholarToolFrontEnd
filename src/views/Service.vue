@@ -1,9 +1,9 @@
 <template>
-  <div class="root">
+  <div class="service">
     <el-button type="primary" class="button">开通新服务</el-button>
     <el-divider content-position="center">已开通的服务</el-divider>
 
-    <div class="service">
+    <div>
       <el-table :row-class-name="'clickable'" :data="services"
                 @row-click="onServiceClick" stripe border>
         <el-table-column
@@ -77,21 +77,15 @@ export default class Service extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .root {
+  .service {
     margin: 0 auto;
-    /*min-height: 100%;*/
-    max-height: 100%;
+    min-height: 100%;
     max-width: 960px;
     display: flex;
     display: -webkit-flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-
-  .service-header {
-    text-align: end;
-    width: 100%;
   }
 
   .button {
