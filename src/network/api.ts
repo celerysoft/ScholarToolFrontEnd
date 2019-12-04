@@ -3,6 +3,7 @@ import { Notification } from 'element-ui';
 import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 import store from '@/store/index';
 import MutationTypes from '@/store/mutation-types';
+import { ServiceTemplateType } from '@/network/response/service-template';
 
 const Axios = require('axios');
 
@@ -22,6 +23,8 @@ class Api {
   readonly SERVICE_URL: string = 'service';
 
   readonly SERVICE_PASSWORD_URL: string = 'service/password';
+
+  readonly SERVICE_TEMPLATE_URL: string = 'service/template';
 
   private axios: AxiosInstance;
 
@@ -199,6 +202,41 @@ class Api {
     }, {
       showError: true,
       loadingAnimation: true,
+    });
+  }
+
+  public getRecommendationServiceTemplate(): AxiosPromise {
+    return this.axios.get(this.SERVICE_TEMPLATE_URL, {
+      showError: true,
+      loadingAnimation: true,
+      params: {
+        type: ServiceTemplateType.recommendation,
+        size: 3,
+      },
+    });
+  }
+
+  public getMonthlyServiceTemplate(): AxiosPromise {
+    return this.axios.get(this.SERVICE_TEMPLATE_URL, {
+      showError: true,
+      loadingAnimation: true,
+      params: {
+        type: ServiceTemplateType.monthly,
+        page: 1,
+        page_size: 10,
+      },
+    });
+  }
+
+  public getDataServiceTemplate(): AxiosPromise {
+    return this.axios.get(this.SERVICE_TEMPLATE_URL, {
+      showError: true,
+      loadingAnimation: true,
+      params: {
+        type: ServiceTemplateType.data,
+        page: 1,
+        page_size: 10,
+      },
     });
   }
 }

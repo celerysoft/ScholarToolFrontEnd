@@ -112,119 +112,26 @@ import MutationTypes from '@/store/mutation-types';
 })
 
 export default class App extends Vue {
-    isCollapse: boolean;
+  isCollapse: boolean;
 
-    elAsideWidth: number;
+  elAsideWidth: number;
 
-    logoutDialogVisible: boolean;
+  logoutDialogVisible: boolean;
 
-    // goTopButtonVisible: boolean = this.$store.state.goTopButtonVisible;
-    goTopButtonVisible: boolean = false;
+  // goTopButtonVisible: boolean = this.$store.state.goTopButtonVisible;
+  goTopButtonVisible: boolean = false;
 
-    // goBackButtonDisabled: boolean = this.$store.state.goBackButtonDisabled;
-    goBackButtonDisabled:boolean = false;
+  // goBackButtonDisabled: boolean = this.$store.state.goBackButtonDisabled;
+  goBackButtonDisabled:boolean = false;
 
-    timer?: number;
+  timer?: number;
 
-    isGoingTop: boolean = false;
+  isGoingTop: boolean = false;
 
-    get isLogin() {
-      return this.$store.getters.isLogin;
-    }
-
-    get isLoading() {
-      return this.$store.getters.isLoading;
-    }
-
-    get activatedMenuIndex() {
-      return this.$store.getters.activatedMenuIndex;
-    }
-
-    constructor() {
-      super();
-      this.isCollapse = false;
-      this.elAsideWidth = 300;
-      this.logoutDialogVisible = false;
-    }
-
-    backToHomepage() {
-      if (this.isLogin) {
-        this.$router.push('/');
-      } else if (!this.isLogin && this.$route.path !== '/login/') {
-        this.$router.push('/login/');
-      }
-    }
-
-    toggleSidebar() {
-      if (this.isLogin) {
-        this.isCollapse = !this.isCollapse;
-      }
-    }
-
-    handleOpen() {
-      this.elAsideWidth = 300;
-    }
-
-    handleClose() {
-      this.elAsideWidth = 64;
-    }
-
-    showLogoutDialog() {
-      this.logoutDialogVisible = true;
-    }
-
-    goBack() {
-      // eslint-disable-next-line no-unused-expressions
-      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
-    }
-
-    goTop() {
-      // speedFactor越大滚动速度越大
-      const speedFactor = 100;
-      const scrollFrequency = 25;
-
-      this.isGoingTop = true;
-      this.timer = setInterval(() => {
-        // const scrollY = window.pageYOffset
-        //     || document.documentElement.scrollTop || document.body.scrollTop;
-        const view: Vue = this.$refs.mainContentView as Vue;
-        const scrollY = view.$el.scrollTop;
-        let speed = 0;
-        if (scrollY <= speedFactor) {
-          speed = -scrollY;
-        } else {
-          speed = -Math.floor(scrollY / speedFactor);
-          speed = Math.abs(speed) > speedFactor ? speed : -speedFactor;
-        }
-
-        // eslint-disable-next-line no-multi-assign
-        view.$el.scrollTop = scrollY + speed;
-        // document.documentElement.scrollTop = document.body.scrollTop = scrollY + speed;
-
-        if (scrollY <= 0) {
-          this.isGoingTop = false;
-          clearInterval(this.timer);
-        }
-      }, scrollFrequency);
-    }
-
-    onScroll() {
-      // const scrollY = window.pageYOffset
-      //     || document.documentElement.scrollTop || document.body.scrollTop;
-      const view: Vue = this.$refs.mainContentView as Vue;
-      const scrollY = view.$el.scrollTop;
-      const { clientHeight } = document.documentElement;
-      this.goTopButtonVisible = scrollY > clientHeight / 2;
-
-      if (this.isGoingTop && scrollY <= 0) {
-        this.isGoingTop = false;
-        clearInterval(this.timer);
-      }
-    }
-
-    logout() {
-      this.logoutDialogVisible = false;
-      this.$store.commit(MutationTypes.LOGOUT);
+  @Watch('isLogin')
+  // eslint-disable-next-line class-methods-use-this
+  onLoginStatusChanged(isLogin: boolean, oldVal: boolean) {
+    if (!isLogin) {
       this.$router.push({
         path: '/login/',
         query: {
@@ -232,6 +139,106 @@ export default class App extends Vue {
         },
       });
     }
+  }
+
+  get isLogin() {
+    return this.$store.getters.isLogin;
+  }
+
+  get isLoading() {
+    return this.$store.getters.isLoading;
+  }
+
+  get activatedMenuIndex() {
+    return this.$store.getters.activatedMenuIndex;
+  }
+
+  constructor() {
+    super();
+    this.isCollapse = false;
+    this.elAsideWidth = 300;
+    this.logoutDialogVisible = false;
+  }
+
+  logout() {
+    this.logoutDialogVisible = false;
+    this.$store.commit(MutationTypes.LOGOUT);
+  }
+
+  showLogoutDialog() {
+    this.logoutDialogVisible = true;
+  }
+
+  backToHomepage() {
+    if (this.isLogin) {
+      this.$router.push('/');
+    } else if (!this.isLogin && this.$route.path !== '/login/') {
+      this.$router.push('/login/');
+    }
+  }
+
+  toggleSidebar() {
+    if (this.isLogin) {
+      this.isCollapse = !this.isCollapse;
+    }
+  }
+
+  handleOpen() {
+    this.elAsideWidth = 300;
+  }
+
+  handleClose() {
+    this.elAsideWidth = 64;
+  }
+
+  goBack() {
+    // eslint-disable-next-line no-unused-expressions
+    window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
+  }
+
+  goTop() {
+    // speedFactor越大滚动速度越大
+    const speedFactor = 100;
+    const scrollFrequency = 25;
+
+    this.isGoingTop = true;
+    this.timer = setInterval(() => {
+      // const scrollY = window.pageYOffset
+      //     || document.documentElement.scrollTop || document.body.scrollTop;
+      const view: Vue = this.$refs.mainContentView as Vue;
+      const scrollY = view.$el.scrollTop;
+      let speed = 0;
+      if (scrollY <= speedFactor) {
+        speed = -scrollY;
+      } else {
+        speed = -Math.floor(scrollY / speedFactor);
+        speed = Math.abs(speed) > speedFactor ? speed : -speedFactor;
+      }
+
+      // eslint-disable-next-line no-multi-assign
+      view.$el.scrollTop = scrollY + speed;
+      // document.documentElement.scrollTop = document.body.scrollTop = scrollY + speed;
+
+      if (scrollY <= 0) {
+        this.isGoingTop = false;
+        clearInterval(this.timer);
+      }
+    }, scrollFrequency);
+  }
+
+  onScroll() {
+    // const scrollY = window.pageYOffset
+    //     || document.documentElement.scrollTop || document.body.scrollTop;
+    const view: Vue = this.$refs.mainContentView as Vue;
+    const scrollY = view.$el.scrollTop;
+    const { clientHeight } = document.documentElement;
+    this.goTopButtonVisible = scrollY > clientHeight / 2;
+
+    if (this.isGoingTop && scrollY <= 0) {
+      this.isGoingTop = false;
+      clearInterval(this.timer);
+    }
+  }
 }
 </script>
 

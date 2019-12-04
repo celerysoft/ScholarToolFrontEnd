@@ -1,6 +1,6 @@
 <template>
   <div class="service">
-    <el-button type="primary" class="button">开通新服务</el-button>
+    <el-button type="primary" class="button" @click="subscribeNewService">开通新服务</el-button>
     <el-divider content-position="center">已开通的服务</el-divider>
 
     <div>
@@ -71,6 +71,12 @@ export default class Service extends Vue {
     const { uuid } = row;
     this.$router.push({
       path: `/service/${uuid}/`,
+    });
+  }
+
+  subscribeNewService() {
+    this.$router.push({
+      path: '/service/subscribe/',
     });
   }
 }
