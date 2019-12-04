@@ -71,7 +71,7 @@
                 续费
               </el-button>
               <span class="placeholder"></span>
-              <el-button v-if="isMonthlyService" type="primary"
+              <el-button v-if="isMonthlyService" type="primary" @click="modifyAutoRenew"
                          class="btn-modify-auto-renew" plain>
                 修改自动续费
               </el-button>
@@ -183,7 +183,7 @@ import Api from '@/network/api';
 })
 
 export default class ServiceDetail extends Vue {
-  serviceUuid?: string;
+  serviceUuid: string = '';
 
   service: ServiceResponse | null = null;
 
@@ -294,6 +294,34 @@ export default class ServiceDetail extends Vue {
 
       this.closeConnectionPasswordDialog();
     });
+  }
+
+  modifyAutoRenew() {
+    if (this.service && this.service.type === ServiceType.monthly) {
+      let latterStatus: string;
+      if (this.service.auto_renew) {
+        latterStatus = '到期不自动续费';
+      } else {
+        latterStatus = '到期自动续费';
+      }
+      const message: string = `即将把自动续费的状态修改成：${latterStatus}，是否继续？`;
+      this.$confirm(message, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        Api.modifyMonthlyServiceAutoRenewStatus(this.serviceUuid)
+          .then((response) => {
+            this.$message({
+              type: 'success',
+              message: '修改成功',
+            });
+            this.getService(this.serviceUuid);
+          });
+      }).catch(() => {
+        // no op
+      });
+    }
   }
 }
 </script>

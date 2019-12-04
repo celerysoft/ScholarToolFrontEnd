@@ -191,6 +191,16 @@ class Api {
       loadingAnimation: true,
     });
   }
+
+  public modifyMonthlyServiceAutoRenewStatus(uuid: string): AxiosPromise {
+    return this.axios.patch(this.SERVICE_URL, {
+      uuid,
+      auto_renew: 1,
+    }, {
+      showError: true,
+      loadingAnimation: true,
+    });
+  }
 }
 
 export default new Api();
