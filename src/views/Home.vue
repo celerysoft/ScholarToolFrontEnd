@@ -6,7 +6,7 @@
       <div>
         <p>今天是<b>{{ date }}</b>，来看看历史上的今天发生了什么：</p>
         <ul class="today-in-history-list">
-          <li class="text-left" v-for="history in histories" v-bind:key="history.year">
+          <li class="text-left" v-for="history in histories" v-bind:key="history.title">
             <p>
               <b>{{ history.year }}</b>年，<span v-text="history.title"></span>
             </p>

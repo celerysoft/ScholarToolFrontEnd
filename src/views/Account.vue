@@ -33,8 +33,10 @@
             </el-col>
             <div v-else>
               <el-col class="list-text" :span="8">电子邮箱已验证</el-col>
-              <el-col class="list-text text-color-accent" :span="4">
-                <div>修改电子邮箱</div>
+              <el-col class="list-text" :span="4">
+                <div @click="openModifyEmailDialog" class="text-color-accent clickable">
+                  修改电子邮箱
+                </div>
               </el-col>
             </div>
           </el-row>
@@ -64,7 +66,7 @@
       </p>
       <el-button class="btn-suspend-account" type="danger">停用账号</el-button>
 
-      <!-- 修改密码 -->
+      <!-- Modify password dialog -->
       <el-dialog title="修改密码" width="600px" :visible.sync="passwordDialogVisible">
         <el-form label-position="left">
           <el-form-item label="旧密码" label-width="80px">
@@ -80,6 +82,25 @@
         <div slot="footer" class="dialog-footer">
           <el-button @click="cancelModifyPasswordDialog">取 消</el-button>
           <el-button type="primary" @click="modifyPassword">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <!-- Modify email dialog -->
+      <el-dialog title="修改电子邮箱" width="600px" :visible.sync="modifyEmailDialogVisible">
+        <el-form label-position="left">
+          <el-form-item label="登录密码" label-width="120px">
+          <el-input v-model="password" type="password" show-password></el-input>
+          </el-form-item>
+          <el-form-item label="新电子邮箱" label-width="120px">
+            <el-input v-model="newEmail" type="text"></el-input>
+          </el-form-item>
+          <el-form-item label="确认电子邮箱" label-width="120px">
+            <el-input v-model="confirmEmail" type="text"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="cancelModifyEmailDialog">取 消</el-button>
+          <el-button type="primary" @click="modifyEmail">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -109,6 +130,14 @@ export default class Account extends Vue {
   newPassword: string = '';
 
   confirmPassword: string = '';
+
+  modifyEmailDialogVisible: boolean = false;
+
+  password: string = '';
+
+  newEmail: string = '';
+
+  confirmEmail: string = '';
 
   get username() {
     return this.$store.getters.username;
@@ -223,8 +252,81 @@ export default class Account extends Vue {
           message: '密码修改成功，请牢记您的新密码',
           type: 'success',
         });
-        this.resetModifyPasswordDialog();
         this.closeModifyPasswordDialog();
+        this.resetModifyPasswordDialog();
+      });
+  }
+
+  openModifyEmailDialog() {
+    this.modifyEmailDialogVisible = true;
+  }
+
+  closeModifyEmailDialog() {
+    this.modifyEmailDialogVisible = false;
+  }
+
+  cancelModifyEmailDialog() {
+    this.closeModifyEmailDialog();
+    this.resetModifyEmailDialog();
+  }
+
+  resetModifyEmailDialog() {
+    this.password = '';
+    this.newEmail = '';
+    this.confirmEmail = '';
+  }
+
+  modifyEmail() {
+    const password = this.password.trim();
+    const newEmail = this.newEmail.trim();
+    const confirmEmail = this.confirmEmail.trim();
+
+    if (password.length === 0) {
+      this.$message({
+        showClose: true,
+        message: '请输入登录密码以进行变更电子邮箱地址的操作',
+        type: 'warning',
+      });
+      return;
+    }
+
+    if (newEmail.length === 0) {
+      this.$message({
+        showClose: true,
+        message: '请输入新电子邮箱地址',
+        type: 'warning',
+      });
+      return;
+    }
+
+    if (confirmEmail.length === 0) {
+      this.$message({
+        showClose: true,
+        message: '请确认电子邮箱地址',
+        type: 'warning',
+      });
+      return;
+    }
+
+    if (newEmail !== confirmEmail) {
+      this.$message({
+        showClose: true,
+        message: '两次输入的电子邮箱地址不一致',
+        type: 'warning',
+      });
+      return;
+    }
+
+    Api.sendActivationEmailForModifyingEmail(password, newEmail)
+      .then((response) => {
+        this.$notify({
+          title: '修改电子邮箱地址的请求已发出',
+          message: `我们往您的新电子邮箱地址${newEmail}发了一封确认邮件，一旦您完成确认流程，就能启用新的电子邮箱地址。在此之前，您暂时还需使用之前的电子邮箱地址。`,
+          type: 'success',
+          duration: 15000,
+        });
+        this.closeModifyEmailDialog();
+        this.resetModifyEmailDialog();
       });
   }
 }

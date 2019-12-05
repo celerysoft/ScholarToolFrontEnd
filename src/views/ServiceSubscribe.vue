@@ -44,7 +44,7 @@ export default class ServiceSubscribe extends Vue {
 
   // eslint-disable-next-line class-methods-use-this
   handleTabClick(tab: any, event: Event) {
-    console.log(tab, event);
+    // no op
   }
 }
 </script>

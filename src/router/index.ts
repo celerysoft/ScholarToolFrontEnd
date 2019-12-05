@@ -48,6 +48,11 @@ const routes = [
     component: () => import('@/views/Activation.vue'),
   },
   {
+    path: '/account/email/',
+    name: '变更邮箱确认',
+    component: () => import('@/views/EmailModifyValidation.vue'),
+  },
+  {
     path: '/service/',
     name: '我的学术服务',
     component: () => import('@/views/Service.vue'),
@@ -84,7 +89,7 @@ function isLogin(): boolean {
 
 const urlsForbiddenIfLogin = ['/login/', '/register/'];
 
-const urlsWithoutLogin = ['/activation', '/activation/']
+const urlsWithoutLogin = ['/activation', '/activation/', '/account/email', '/account/email/']
   .concat(urlsForbiddenIfLogin);
 
 function isUrlNeedLogin(url: string): boolean {

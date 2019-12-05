@@ -1,34 +1,24 @@
 <template>
-  <div class="activation-view">
+  <div class="email-modify-validation-view">
     <div class="center-container">
       <h3>{{ status }}</h3>
       <div class="content"
-           v-loading="isActivating" element-loading-background="rgba(255, 255, 255, 1)">
-        <div v-if="isActivated">
-          <div>您的账户{{ username }}已经成功激活，欢迎您成为Celery Soft学术的用户</div>
-          <p>
-            在<el-button type="text" @click="turnToScholar">学术</el-button>栏目，可以进行学术服务管理操作
-          </p>
-          <p>
-            在<el-button type="text" @click="turnToEvent">公告</el-button>栏目，可以查看网站公告
-          </p>
-          <p>
-            在<el-button type="text" @click="turnToMyInformation">个人信息</el-button>
-            <span>栏目，可以查看个人信息，进行修改密码等操作</span>
-          </p>
+           v-loading="isValidating" element-loading-background="rgba(255, 255, 255, 1)">
+        <div v-if="isValid" class="text-body text-color-primary">
+          <div>您账户的电子邮箱地址已经成功变更为{{ email }}</div>
         </div>
-        <div v-else>
+        <div v-else class="text-body text-color-primary">
           <div>失败的原因可能有：</div>
           <ul>
             <li>服务器突然走神了</li>
-            <li>激活邮件的有效期已经过了</li>
-            <li>您不小心编辑了激活邮件里的链接（没有完整地复制粘贴链接地址）</li>
-            <li>您已经激活过了，无法重复激活</li>
+            <li>验证邮件的有效期已经过了</li>
+            <li>您不小心编辑了验证邮件里的链接（没有完整地复制粘贴链接地址）</li>
+            <li>您的电子邮箱地址已经成功完成了变更，无法重复变更</li>
           </ul>
           <div>建议您采取以下操作：</div>
           <ul>
-            <li>重新点击一次激活链接</li>
-            <li>重新发送一封激活邮件，然后点击里面的激活链接</li>
+            <li>重新点击一次验证链接</li>
+            <li>重新进行一次修改电子邮箱地址的操作，然后系统会再次发送一封验证邮件，点击里面的验证链接</li>
             <li><el-button type="text" @click="contactCustomerService">联系客服</el-button></li>
           </ul>
         </div>
@@ -53,21 +43,21 @@ import Footer from '@/components/Footer.vue';
   },
 })
 
-export default class Activation extends Vue {
+export default class EmailModifyValidation extends Vue {
   status: string;
 
-  username: string;
+  email: string;
 
-  isActivating: boolean = true;
+  isValidating: boolean = true;
 
-  isActivated: boolean = false;
+  isValid: boolean = false;
 
   jwt: any;
 
   constructor() {
     super();
-    this.status = '正在激活中。。。';
-    this.username = '';
+    this.status = '正在变更电子邮箱地址。。。';
+    this.email = '';
     this.jwt = '';
   }
 
@@ -75,20 +65,19 @@ export default class Activation extends Vue {
     this.jwt = this.$route.query.jwt;
 
     if (typeof this.jwt === 'string' && this.jwt.length > 0) {
-      this.activateAccount();
+      this.modifyEmail();
     } else {
       this.$router.push('/');
     }
   }
 
-  activateAccount() {
-    Api.activateAccount(this.jwt)
+  modifyEmail() {
+    Api.modifyEmail(this.jwt)
       .then((response: AxiosResponse) => {
-        this.status = '激活成功';
-        this.isActivated = true;
+        this.status = '电子邮箱地址变更成功';
+        this.isValid = true;
 
         this.$store.commit(MutationTypes.ON_RECEIVED_JWT, response.data.jwt);
-        this.$store.commit(MutationTypes.ACTIVATION);
         Api.getSelfInformation()
           .then((userApiResponse) => {
             const user: UserResponse = formatUserApiResponse(
@@ -98,25 +87,32 @@ export default class Activation extends Vue {
               username, uuid, email, status, registerDate,
             } = user;
 
-            this.username = username;
             const payload: LoginPayload = new LoginPayload(
               status, username, email, uuid, registerDate,
             );
             this.$store.commit(MutationTypes.LOGIN);
             this.$store.commit(MutationTypes.ON_RECEIVED_USER_INFORMATION, payload);
+
+            this.$notify({
+              title: '电子邮箱地址变更成功',
+              message: `您账户的电子邮箱地址已经成功变更为${email}`,
+              type: 'success',
+              duration: 10000,
+            });
+            this.$router.push('/account/');
           });
       })
       .catch((error: AxiosError) => {
-        this.status = '激活失败';
-        this.isActivated = false;
+        this.status = '电子邮箱地址变更失败';
+        this.isValid = false;
         this.$message({
           showClose: true,
-          message: `激活失败：${error.message}`,
+          message: `电子邮箱地址变更失败：${error.message}`,
           type: 'error',
         });
       })
       .finally(() => {
-        this.isActivating = false;
+        this.isValidating = false;
       });
   }
 
@@ -143,7 +139,7 @@ export default class Activation extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .activation-view {
+  .email-modify-validation-view {
     margin: 0 auto;
     min-height: 100%;
     max-width: 960px;

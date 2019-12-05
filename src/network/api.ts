@@ -137,6 +137,25 @@ class Api {
     });
   }
 
+  public sendActivationEmailForModifyingEmail(password: string, email: string): AxiosPromise {
+    return this.axios.patch(this.EMAIL_URL, {
+      password,
+      email,
+    }, {
+      showError: true,
+      loadingAnimation: true,
+    });
+  }
+
+  public modifyEmail(jwt: string): AxiosPromise {
+    return this.axios.put(this.EMAIL_URL, {
+      jwt,
+    }, {
+      showError: true,
+      loadingAnimation: true,
+    });
+  }
+
   public getSelfInformation(): AxiosPromise {
     return this.axios.get(this.USER_URL, {
       showError: true,
