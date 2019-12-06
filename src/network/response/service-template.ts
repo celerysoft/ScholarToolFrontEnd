@@ -25,6 +25,8 @@ export interface ServiceTemplateApiResponse {
 /* eslint-enable camelcase */
 
 export interface ServiceTemplateResponse extends ServiceTemplateApiResponse {
+  typeDescription: string;
+
   packageDescription: string;
 
   createdAtDescription: string;
@@ -58,11 +60,13 @@ function formatBandwidthToString(bandwidth: number): string {
 export default function formatServiceTemplateApiResponse(
   serviceTemplate: ServiceTemplateApiResponse,
 ): ServiceTemplateResponse {
+  const typeDescription = formatServiceType(serviceTemplate.type);
   const date = new Date(serviceTemplate.created_at);
   const createdAtDescription = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
   const packageDescription: string = formatBandwidthToString(serviceTemplate.package);
 
   return Object.assign(serviceTemplate, {
+    typeDescription,
     createdAtDescription,
     packageDescription,
   });

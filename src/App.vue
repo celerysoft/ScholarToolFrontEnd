@@ -61,7 +61,7 @@
         </div>
       </el-aside>
       <el-main class="main-content" ref="mainContentView" @scroll.native.passive="onScroll">
-        <router-view ref="routerView" v-loading="isLoading"/>
+        <router-view ref="routerView" v-loading="isLoading" @go-back="goBack"/>
 
         <el-dialog
           title="提示"
@@ -191,7 +191,7 @@ export default class App extends Vue {
     this.elAsideWidth = 64;
   }
 
-  goBack() {
+  public goBack() {
     // eslint-disable-next-line no-unused-expressions
     window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/');
   }

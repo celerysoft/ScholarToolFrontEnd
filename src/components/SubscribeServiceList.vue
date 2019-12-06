@@ -33,7 +33,7 @@ export default class SubscribeServiceList extends Vue {
   private data?: ServiceTemplateResponse[];
 
   pay(uuid: string) {
-    this.$router.push(`/service/subscribe/pay/${uuid}`);
+    this.$router.push(`/service/subscribe/pay/${uuid}/`);
   }
 }
 </script>

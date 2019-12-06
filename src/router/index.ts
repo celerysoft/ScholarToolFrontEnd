@@ -63,6 +63,11 @@ const routes = [
     component: () => import('@/views/ServiceSubscribe.vue'),
   },
   {
+    path: '/service/subscribe/pay/:uuid/',
+    name: '支付',
+    component: () => import('@/views/ServiceSubscribePay.vue'),
+  },
+  {
     path: '/service/:uuid/',
     name: '学术服务详情',
     component: () => import('@/views/ServiceDetail.vue'),

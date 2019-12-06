@@ -9,5 +9,9 @@ export enum MenuIndex {
 export enum UserStatus {
   WaitingActivation = 0,
   Active = 1,
-  Inactive = 2,
+  Suspend = 2,
+}
+
+export enum GlobalEvent {
+  GoBack = 'go-back',
 }

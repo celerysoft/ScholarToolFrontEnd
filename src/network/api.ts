@@ -258,6 +258,24 @@ class Api {
       },
     });
   }
+
+  public getServiceTemplate(uuid: string): AxiosPromise {
+    return this.axios.get(this.SERVICE_TEMPLATE_URL, {
+      showError: true,
+      loadingAnimation: true,
+      params: {
+        uuid,
+      },
+    });
+  }
+
+  public createService(uuid: string, password: string): AxiosPromise {
+    return this.axios.post(this.SERVICE_URL, {
+      uuid, password,
+    }, {
+      showError: true,
+    });
+  }
 }
 
 export default new Api();
