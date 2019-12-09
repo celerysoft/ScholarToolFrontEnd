@@ -31,12 +31,26 @@
               </div>
               <div class="placeholder"></div>
             </div>
-            <div class="service-information-item">
+            <div class="service-information-item service-information-package">
               <div>学术流量：</div>
               <div>
                 {{ serviceTemplate.packageDescription }}
               </div>
               <div class="placeholder"></div>
+            </div>
+
+            <div class="service-information-item service-information-auto-renew"
+                 v-if="isMonthlyService">
+              <div class="text-subtitle">自动续费</div>
+              <el-switch
+                v-model="autoRenew">
+              </el-switch>
+            </div>
+            <div class="service-information-password-hint"
+                 v-if="isMonthlyService">
+              <div class="text-comment text-color-secondary">
+                我们会在每个月初自动扣除续费所需的学术积分
+              </div>
             </div>
 
             <div class="service-information-item service-information-password">
@@ -113,7 +127,7 @@
     <div class="btn-group">
       <el-button class="btn-pay" type="primary" :loading="isLoading"
                  @click="payOrder">
-        支付
+        确认订单
       </el-button>
       <el-button class="btn-cancel" @click="goBack">取消</el-button>
     </div>
@@ -126,12 +140,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import formatServiceTemplateApiResponse, {
   ServiceTemplateApiResponse,
-  ServiceTemplateResponse,
+  ServiceTemplateResponse, ServiceTemplateType,
 } from '@/network/response/service-template';
 import UserAgreementDrawer from '@/components/UserAgreementDrawer.vue';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
 import { GlobalEvent } from '@/toolkits/constant';
+import { ServiceType } from '@/network/response/service';
 
 @Component({
   components: {
@@ -140,7 +155,7 @@ import { GlobalEvent } from '@/toolkits/constant';
   },
 })
 
-export default class ServiceSubscribePay extends Vue {
+export default class ServiceSubscribeOrder extends Vue {
   serviceTemplateUuid: string = '';
 
   serviceTemplate: ServiceTemplateResponse | null = null;
@@ -150,6 +165,16 @@ export default class ServiceSubscribePay extends Vue {
   checkedUserAgreement: boolean = false;
 
   servicePassword: string = '';
+
+  autoRenew: boolean = true;
+
+  get isMonthlyService(): boolean {
+    if (this.serviceTemplate) {
+      return this.serviceTemplate.type === ServiceTemplateType.monthly;
+    }
+
+    return false;
+  }
 
   get isLoading() {
     return this.$store.getters.isLoading;
@@ -209,14 +234,24 @@ export default class ServiceSubscribePay extends Vue {
       return;
     }
 
-    Api.createService(this.serviceTemplateUuid, this.servicePassword)
+    let autoRenew: boolean | null;
+    if (this.isMonthlyService) {
+      // eslint-disable-next-line prefer-destructuring
+      autoRenew = this.autoRenew;
+    } else {
+      autoRenew = null;
+    }
+    Api.createOrder(this.serviceTemplateUuid, this.servicePassword, autoRenew)
       .then((response) => {
         this.$notify({
-          title: '学术服务开通成功',
-          message: '我们正在后台对新开通的学术服务进行初始化设置，预计在1分钟内开通成功',
+          title: '订单创建成功',
+          message: '请在30分钟内完成支付，否则订单将被取消',
+          type: 'info',
+          duration: 10000,
         });
-        this.$router.push('/service/');
+        this.$router.push(`/service/order/pay/${response.data.uuid}/`);
       });
+    // message: '我们正在后台对新开通的学术服务进行初始化设置，预计在1分钟内开通成功',
   }
 }
 </script>
@@ -258,6 +293,12 @@ export default class ServiceSubscribePay extends Vue {
     .service-information-password-hint {
       width: 100%;
       text-align: end;
+    }
+    .service-information-package {
+      margin-bottom: 16px;
+    }
+    .service-information-auto-renew {
+      margin-top: 16px;
     }
     .service-information-password {
       margin-top: 16px;

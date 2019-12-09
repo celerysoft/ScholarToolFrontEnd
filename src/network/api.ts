@@ -26,6 +26,8 @@ class Api {
 
   readonly SERVICE_TEMPLATE_URL: string = 'service/template';
 
+  readonly SERVICE_ORDER_URL: string = 'service/order';
+
   private axios: AxiosInstance;
 
   constructor() {
@@ -76,7 +78,10 @@ class Api {
             });
 
             store.commit(MutationTypes.LOGOUT);
+
+            return Promise.reject(error);
           }
+
           error.message = error.response.data.message;
         } else if (error.request) {
           console.log(error.request);
@@ -269,10 +274,21 @@ class Api {
     });
   }
 
-  public createService(uuid: string, password: string): AxiosPromise {
-    return this.axios.post(this.SERVICE_URL, {
-      uuid, password,
-    }, {
+  public createOrder(uuid: string, password: string, autoRenew: boolean | null): AxiosPromise {
+    let data: object;
+    if (autoRenew) {
+      data = {
+        template_uuid: uuid,
+        password,
+        auto_renew: autoRenew,
+      };
+    } else {
+      data = {
+        uuid,
+        password,
+      };
+    }
+    return this.axios.post(this.SERVICE_ORDER_URL, data, {
       showError: true,
     });
   }
