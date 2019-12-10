@@ -1,6 +1,6 @@
 <template>
   <div class="service-subscribe-pay-view">
-    <div v-if="serviceTemplate" class="content">
+    <div class="content" v-if="orderSnapshot && order">
       <el-row :gutter="32">
         <el-col :span="12">
           <div class="text-main-title text-color-primary">
@@ -14,11 +14,11 @@
            </el-alert>
            -->
           <div class="service-information">
-            <div class="service-information-title">{{ serviceTemplate.title }}</div>
-            <div class="service-information-subtitle">{{ serviceTemplate.subtitle }}</div>
+            <div class="service-information-title">{{ orderSnapshot.title }}</div>
+            <div class="service-information-subtitle">{{ orderSnapshot.subtitle }}</div>
             <div>
               <ul>
-                <li v-for="description in serviceTemplate.description.split('#')"
+                <li v-for="description in orderSnapshot.description.split('#')"
                     :key="description">
                   {{ description }}
                 </li>
@@ -27,14 +27,14 @@
             <div class="service-information-item">
               <div>学术服务类型：</div>
               <div>
-                {{ serviceTemplate.typeDescription }}
+                {{ orderSnapshot.typeDescription }}
               </div>
               <div class="placeholder"></div>
             </div>
             <div class="service-information-item service-information-package">
               <div>学术流量：</div>
               <div>
-                {{ serviceTemplate.packageDescription }}
+                {{ orderSnapshot.packageDescription }}
               </div>
               <div class="placeholder"></div>
             </div>
@@ -43,7 +43,7 @@
                  v-if="isMonthlyService">
               <div class="text-subtitle">自动续费</div>
               <el-switch
-                v-model="autoRenew">
+                v-model="orderSnapshot.auto_renew" disabled>
               </el-switch>
             </div>
             <div class="service-information-password-hint"
@@ -58,8 +58,8 @@
               <div class="input-service-password">
                 <el-input
                   placeholder="请输入学术服务连接密码"
-                  v-model="servicePassword"
-                  clearable>
+                  v-model="orderSnapshot.service_password"
+                  clearable disabled>
                 </el-input>
               </div>
             </div>
@@ -83,20 +83,20 @@
           -->
           <div class="order-information">
             <div class="order-information-item">
-              <div class="order-information-title">{{ serviceTemplate.title }}</div>
-              <div class="order-information-text">{{ serviceTemplate.price }} 学术积分</div>
+              <div class="order-information-title">{{ orderSnapshot.title }}</div>
+              <div class="order-information-text">{{ orderSnapshot.price }} 学术积分</div>
             </div>
             <div class="order-information-item">
               <div class="order-information-title">初装费</div>
               <div class="order-information-text">
-                {{ serviceTemplate.initialization_fee }} 学术积分
+                {{ orderSnapshot.initialization_fee }} 学术积分
               </div>
             </div>
             <div class="divider"></div>
             <div class="order-information-item">
               <div class="order-information-title">总计</div>
               <div class="order-information-text gross-amount">
-                {{ serviceTemplate.price + serviceTemplate.initialization_fee }} 学术积分
+                {{ order.amount }} 学术积分
               </div>
             </div>
             <div class="order-information-item account-balance-item">
@@ -112,24 +112,16 @@
           </div>
         </el-col>
       </el-row>
-      <div class="cb-agreement">
-        <el-checkbox v-model="checkedUserAgreement">
-          我已阅读并同意
-          <span class="user-agreement" @click.prevent="readUserAgreement">
-            《用户协议》
-          </span>
-        </el-checkbox>
+      <div class="payment-methods">
+
       </div>
     </div>
-    <user-agreement-drawer :visible="userAgreementVisible" direction="ltr"
-                           :before-close="() => userAgreementVisible = false">
-    </user-agreement-drawer>
-    <div class="btn-group">
+    <div class="btn-group" v-if="orderSnapshot && order">
       <el-button class="btn-pay" type="primary" :loading="isLoading"
-                 @click="createOrder">
-        确认订单
+                 @click="payOrder">
+        支付
       </el-button>
-      <el-button class="btn-cancel" @click="goBack">取消</el-button>
+      <el-button class="btn-cancel" @click="cancelPayment">取消</el-button>
     </div>
     <div class="placeholder"></div>
     <Footer></Footer>
@@ -138,38 +130,35 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import formatServiceTemplateApiResponse, {
-  ServiceTemplateApiResponse,
-  ServiceTemplateResponse, ServiceTemplateType,
-} from '@/network/response/service-template';
-import UserAgreementDrawer from '@/components/UserAgreementDrawer.vue';
+import formatTradeOrderApiResponse, {
+  TradeOrderApiResponse,
+  TradeOrderResponse,
+} from '@/network/response/trade-order';
+import formatSnapshotApiResponse, {
+  SnapshotApiResponse,
+  SnapshotResponse,
+} from '@/network/response/snapshot';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
 import { GlobalEvent } from '@/toolkits/constant';
+import MutationTypes from '@/store/mutation-types';
 
 @Component({
   components: {
-    UserAgreementDrawer,
     Footer,
   },
 })
 
 export default class ServiceSubscribeOrder extends Vue {
-  serviceTemplateUuid: string = '';
+  serviceOrderUuid: string = '';
 
-  serviceTemplate: ServiceTemplateResponse | null = null;
+  order: TradeOrderResponse | null = null;
 
-  userAgreementVisible: boolean = false;
-
-  checkedUserAgreement: boolean = false;
-
-  servicePassword: string = '';
-
-  autoRenew: boolean = true;
+  orderSnapshot: SnapshotResponse | null = null;
 
   get isMonthlyService(): boolean {
-    if (this.serviceTemplate) {
-      return this.serviceTemplate.type === ServiceTemplateType.monthly;
+    if (this.orderSnapshot) {
+      return this.orderSnapshot.type === 0;
     }
 
     return false;
@@ -180,22 +169,48 @@ export default class ServiceSubscribeOrder extends Vue {
   }
 
   mounted() {
-    this.serviceTemplateUuid = this.$route.params.uuid;
+    this.serviceOrderUuid = this.$route.params.uuid;
 
-    if (this.serviceTemplateUuid.length > 0) {
-      this.getServiceTemplate(this.serviceTemplateUuid);
+    if (this.serviceOrderUuid.length > 0) {
+      this.getOrderInformation(this.serviceOrderUuid);
     } else {
       this.$emit(GlobalEvent.GoBack);
     }
   }
 
-  getServiceTemplate(uuid: string) {
-    Api.getServiceTemplate(uuid)
+  async getOrderInformation(uuid: string) {
+    this.$store.commit(MutationTypes.LOADING);
+
+    await Api.getOrder(uuid)
       .then((response) => {
-        this.serviceTemplate = formatServiceTemplateApiResponse(
-          response.data.template as ServiceTemplateApiResponse,
+        this.order = formatTradeOrderApiResponse(
+          response.data.order as TradeOrderApiResponse,
         );
+      })
+      .catch((error) => {
+        this.$notify({
+          type: 'error',
+          title: '',
+          message: `获取订单信息错误，请刷新重试，错误原因${error.message}`,
+        });
       });
+
+    await Api.getOrderSnapshot(uuid)
+      .then((response) => {
+        this.orderSnapshot = formatSnapshotApiResponse(
+          response.data.snapshot as SnapshotApiResponse,
+        );
+      })
+      .catch((error) => {
+        this.$notify({
+          type: 'error',
+          title: '',
+          message: `获取订单快照错误，请刷新重试，错误原因${error.message}`,
+        });
+      });
+
+    console.log(1);
+    this.$store.commit(MutationTypes.ON_LOADING_COMPLETED);
   }
 
   contactCustomerService() {
@@ -206,50 +221,13 @@ export default class ServiceSubscribeOrder extends Vue {
     });
   }
 
-  readUserAgreement() {
-    this.userAgreementVisible = true;
+  cancelPayment() {
+    this.$router.push('/service/');
   }
 
-  goBack() {
-    this.$emit(GlobalEvent.GoBack);
-  }
-
-  createOrder() {
-    if (!this.checkedUserAgreement) {
-      this.$message({
-        type: 'warning',
-        message: '请阅读并同意用户协议',
-        showClose: true,
-      });
-      return;
-    }
-
-    if (this.servicePassword.length === 0) {
-      this.$message({
-        type: 'warning',
-        message: '请输入学术服务的连接密码',
-        showClose: true,
-      });
-      return;
-    }
-
-    let autoRenew: boolean | null;
-    if (this.isMonthlyService) {
-      // eslint-disable-next-line prefer-destructuring
-      autoRenew = this.autoRenew;
-    } else {
-      autoRenew = null;
-    }
-    Api.createOrder(this.serviceTemplateUuid, this.servicePassword, autoRenew)
-      .then((response) => {
-        this.$notify({
-          title: '订单创建成功',
-          message: '请在30分钟内完成支付，否则订单将被取消',
-          type: 'info',
-          duration: 10000,
-        });
-        this.$router.push(`/service/order/pay/${response.data.uuid}/`);
-      });
+  payOrder() {
+    console.log(this.isMonthlyService);
+    // message: '我们正在后台对新开通的学术服务进行初始化设置，预计在1分钟内开通成功',
   }
 }
 </script>
@@ -354,7 +332,7 @@ export default class ServiceSubscribeOrder extends Vue {
     margin: 2px 0;
   }
 
-  .cb-agreement {
+  .payment-methods {
     @extend .text-body;
     @extend .text-color-primary;
     margin-top: 48px;

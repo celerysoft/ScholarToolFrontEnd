@@ -4,6 +4,7 @@ import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 import store from '@/store/index';
 import MutationTypes from '@/store/mutation-types';
 import { ServiceTemplateType } from '@/network/response/service-template';
+import { TradeOrderStatus } from '@/network/response/trade-order';
 
 const Axios = require('axios');
 
@@ -27,6 +28,8 @@ class Api {
   readonly SERVICE_TEMPLATE_URL: string = 'service/template';
 
   readonly SERVICE_ORDER_URL: string = 'service/order';
+
+  readonly SERVICE_ORDER_SNAPSHOT_URL: string = 'service/order/snapshot';
 
   private axios: AxiosInstance;
 
@@ -284,12 +287,37 @@ class Api {
       };
     } else {
       data = {
-        uuid,
+        template_uuid: uuid,
         password,
       };
     }
     return this.axios.post(this.SERVICE_ORDER_URL, data, {
       showError: true,
+    });
+  }
+
+  public getUnpaidOrder(): AxiosPromise {
+    return this.axios.get(this.SERVICE_ORDER_URL, {
+      params: {
+        status: [TradeOrderStatus.initialization, TradeOrderStatus.unpaid],
+      },
+      showError: true,
+    });
+  }
+
+  public getOrder(uuid: string): AxiosPromise {
+    return this.axios.get(this.SERVICE_ORDER_URL, {
+      params: {
+        uuid,
+      },
+    });
+  }
+
+  public getOrderSnapshot(uuid: string): AxiosPromise {
+    return this.axios.get(this.SERVICE_ORDER_SNAPSHOT_URL, {
+      params: {
+        trade_order_uuid: uuid,
+      },
     });
   }
 }
