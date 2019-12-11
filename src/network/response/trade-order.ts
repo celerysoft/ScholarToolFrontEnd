@@ -12,7 +12,7 @@ export interface TradeOrderApiResponse {
 
   type: number
 
-  amount: string
+  amount: number
 
   description: string
 
@@ -26,17 +26,25 @@ export const enum TradeOrderStatus {
   unpaid = 3,
 }
 
+function formatAmount(amount: number): string {
+  return amount.toFixed(2);
+}
+
 export interface TradeOrderResponse extends TradeOrderApiResponse {
+  amountDescription: string;
+
   createdAtDescription: string;
 }
 
 export default function formatTradeOrderApiResponse(
   tradeOrder: TradeOrderApiResponse,
 ): TradeOrderResponse {
+  const amountDescription = formatAmount(tradeOrder.amount);
   const date = new Date(tradeOrder.created_at);
   const createdAtDescription = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
   return Object.assign(tradeOrder, {
+    amountDescription,
     createdAtDescription,
   });
 }

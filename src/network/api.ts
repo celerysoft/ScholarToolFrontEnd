@@ -320,6 +320,14 @@ class Api {
       },
     });
   }
+
+  public cancelOrder(uuid: string): AxiosPromise {
+    return this.axios.delete(this.SERVICE_ORDER_URL, {
+      params: {
+        uuid,
+      },
+    });
+  }
 }
 
 export default new Api();

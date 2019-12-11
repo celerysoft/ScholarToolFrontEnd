@@ -11,7 +11,7 @@
           width="240">
         </el-table-column>
         <el-table-column
-          prop="amount"
+          prop="amountDescription"
           label="金额"
           width="240">
         </el-table-column>
@@ -126,27 +126,31 @@ export default class Service extends Vue {
     });
   }
 
-  openCancelOrderPopover(order: TradeOrderResponse) {
-    this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+  async openCancelOrderPopover(order: TradeOrderResponse) {
+    this.$confirm(`此操作将取消订单『${order.title}』，是否继续?`, '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning',
     }).then(() => {
-      this.$message({
-        type: 'success',
-        message: '删除成功!',
-      });
+      this.cancelOrder(order);
     }).catch(() => {
-      this.$message({
-        type: 'info',
-        message: '已取消删除',
-      });
+      // no op
     });
   }
 
-  cancelOrder(uuid: string) {
-    console.log(uuid);
-    console.log(this);
+  async cancelOrder(order: TradeOrderResponse) {
+    await Api.cancelOrder(order.uuid);
+
+    this.$message({
+      type: 'success',
+      message: `订单『${order.title}』取消成功`,
+    });
+
+    await Api.getUnpaidOrder()
+      .then((response) => {
+        this.unpaidOrders = (response.data.orders as TradeOrderApiResponse[])
+          .map(formatTradeOrderApiResponse);
+      });
   }
 
   payOrder(uuid: string) {

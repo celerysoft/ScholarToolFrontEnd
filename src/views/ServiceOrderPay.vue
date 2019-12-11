@@ -209,7 +209,6 @@ export default class ServiceSubscribeOrder extends Vue {
         });
       });
 
-    console.log(1);
     this.$store.commit(MutationTypes.ON_LOADING_COMPLETED);
   }
 
@@ -226,7 +225,6 @@ export default class ServiceSubscribeOrder extends Vue {
   }
 
   payOrder() {
-    console.log(this.isMonthlyService);
     // message: '我们正在后台对新开通的学术服务进行初始化设置，预计在1分钟内开通成功',
   }
 }
