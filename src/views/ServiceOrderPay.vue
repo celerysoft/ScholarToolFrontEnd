@@ -99,23 +99,31 @@
                 {{ order.amount }} 学术积分
               </div>
             </div>
-            <div class="order-information-item account-balance-item">
-              <div class="order-information-title">账户余额</div>
-              <div class="order-information-text account-balance">
-                0 学术积分
-              </div>
-            </div>
-            <div class="text-body-small text-left">
+            <div class="customer-service text-body-small text-left">
               如果你有任何疑问可以随时咨询我们的
               <span class="text-color-accent clickable" @click="contactCustomerService">客服</span>
             </div>
           </div>
         </el-col>
       </el-row>
-      <div class="payment-methods">
+    </div>
 
+    <div v-if="paymentMethods.length > 0" class="payment-methods-content">
+      <el-divider>支付方式</el-divider>
+      <div class="payment-methods">
+        <div v-for="paymentMethod in this.paymentMethods" :key="paymentMethod.uuid"
+             class="payment-methods-item">
+          <div :class="{ 'text-color-secondary': !isPaymentMethodValid(paymentMethod.status) }">
+            {{ paymentMethod.name }}
+          </div>
+          <el-radio v-model="paymentMethodUuid" :label="paymentMethod.uuid"
+                    :disabled="!isPaymentMethodValid(paymentMethod.status)">
+            <span></span>
+          </el-radio>
+        </div>
       </div>
     </div>
+
     <div class="btn-group" v-if="orderSnapshot && order">
       <el-button class="btn-pay" type="primary" :loading="isLoading"
                  @click="payOrder">
@@ -138,6 +146,11 @@ import formatSnapshotApiResponse, {
   SnapshotApiResponse,
   SnapshotResponse,
 } from '@/network/response/snapshot';
+import formatPaymentMethodApiResponse, {
+  PaymentMethodStatus,
+  PaymentMethodApiResponse,
+  PaymentMethodResponse,
+} from '@/network/response/payment-method';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
 import { GlobalEvent } from '@/toolkits/constant';
@@ -156,6 +169,15 @@ export default class ServiceSubscribeOrder extends Vue {
 
   orderSnapshot: SnapshotResponse | null = null;
 
+  paymentMethods: PaymentMethodResponse[] = [];
+
+  paymentMethodUuid: string = '';
+
+  // eslint-disable-next-line class-methods-use-this
+  isPaymentMethodValid(status: number) {
+    return status === PaymentMethodStatus.valid;
+  }
+
   get isMonthlyService(): boolean {
     if (this.orderSnapshot) {
       return this.orderSnapshot.type === 0;
@@ -172,16 +194,16 @@ export default class ServiceSubscribeOrder extends Vue {
     this.serviceOrderUuid = this.$route.params.uuid;
 
     if (this.serviceOrderUuid.length > 0) {
-      this.getOrderInformation(this.serviceOrderUuid);
+      this.getData(this.serviceOrderUuid);
     } else {
       this.$emit(GlobalEvent.GoBack);
     }
   }
 
-  async getOrderInformation(uuid: string) {
+  getData(uuid: string) {
     this.$store.commit(MutationTypes.LOADING);
 
-    await Api.getOrder(uuid)
+    Api.getOrder(uuid)
       .then((response) => {
         this.order = formatTradeOrderApiResponse(
           response.data.order as TradeOrderApiResponse,
@@ -195,7 +217,7 @@ export default class ServiceSubscribeOrder extends Vue {
         });
       });
 
-    await Api.getOrderSnapshot(uuid)
+    Api.getOrderSnapshot(uuid)
       .then((response) => {
         this.orderSnapshot = formatSnapshotApiResponse(
           response.data.snapshot as SnapshotApiResponse,
@@ -208,6 +230,14 @@ export default class ServiceSubscribeOrder extends Vue {
           message: `获取订单快照错误，请刷新重试，错误原因${error.message}`,
         });
       });
+
+    Api.getPaymentMethods().then((response) => {
+      this.paymentMethods = (response.data.payment_methods as PaymentMethodApiResponse[])
+        .map(formatPaymentMethodApiResponse);
+      if (this.paymentMethods.length > 1) {
+        this.paymentMethodUuid = this.paymentMethods[0].uuid;
+      }
+    });
 
     this.$store.commit(MutationTypes.ON_LOADING_COMPLETED);
   }
@@ -225,7 +255,7 @@ export default class ServiceSubscribeOrder extends Vue {
   }
 
   payOrder() {
-    // message: '我们正在后台对新开通的学术服务进行初始化设置，预计在1分钟内开通成功',
+    console.log(this.isMonthlyService);
   }
 }
 </script>
@@ -310,17 +340,6 @@ export default class ServiceSubscribeOrder extends Vue {
     .gross-amount {
       font-weight: bold;
     }
-
-    .account-balance-item {
-      margin: 32px 0;
-      .account-balance {
-        font-weight: bold;
-      }
-    }
-  }
-
-  .user-agreement {
-    @extend .text-color-accent;
   }
 
   .divider {
@@ -330,10 +349,41 @@ export default class ServiceSubscribeOrder extends Vue {
     margin: 2px 0;
   }
 
+  .customer-service {
+    margin-top: 32px;
+  }
+
+  .payment-methods-content {
+    margin-top: 24px;
+    width: 100%;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   .payment-methods {
     @extend .text-body;
     @extend .text-color-primary;
-    margin-top: 48px;
+    width: 35%;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .payment-methods-item {
+      margin-bottom: 8px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      width: 100%;
+      display: flex;
+      display: -webkit-flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 
   .btn-group {

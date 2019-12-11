@@ -31,6 +31,8 @@ class Api {
 
   readonly SERVICE_ORDER_SNAPSHOT_URL: string = 'service/order/snapshot';
 
+  readonly SERVICE_PAYMENT_METHOD_URL: string = 'service/payment_method';
+
   private axios: AxiosInstance;
 
   constructor() {
@@ -327,6 +329,10 @@ class Api {
         uuid,
       },
     });
+  }
+
+  public getPaymentMethods(): AxiosPromise {
+    return this.axios.get(this.SERVICE_PAYMENT_METHOD_URL);
   }
 }
 
