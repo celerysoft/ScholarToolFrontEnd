@@ -60,6 +60,23 @@
         </div>
       </el-card>
 
+      <el-card class="box-card payment-information-card">
+        <div slot="header">
+          <div class="card-title">付款信息</div>
+        </div>
+        <div class="">
+          <el-row>
+            <el-col class="list-title" :span="4">学术积分账户余额</el-col>
+            <el-col class="list-text" :span="8">{{ scholarPaymentAccountBalance }} 学术积分</el-col>
+            <el-col class="list-text text-color-primary" :offset="8" :span="4">
+              <div class="clickable text-color-accent">充值</div>
+            </el-col>
+          </el-row>
+        </div>
+      </el-card>
+
+      <p class="text-body" v-if="!isUserActivated">完成电子邮箱验证之后，我们将为您的账户充值一定的学术积分。</p>
+
 
       <p class="text-body" style="margin-top: 64px;">如果您想中止在 Celery Soft 学术的服务，可以尝试停用账号。
         <el-button type="text">了解详情</el-button>
@@ -139,6 +156,8 @@ export default class Account extends Vue {
 
   confirmEmail: string = '';
 
+  scholarPaymentAccountBalance: number = 0;
+
   get username() {
     return this.$store.getters.username;
   }
@@ -156,9 +175,14 @@ export default class Account extends Vue {
   }
 
   mounted() {
-    this.getUserInformation();
+    this.getData();
 
     this.$store.commit(MutationTypes.ON_ACTIVATED_MENU_CHANGE, MenuIndex.Account);
+  }
+
+  getData() {
+    this.getUserInformation();
+    this.getUserScholarPaymentAccount();
   }
 
   sendActivationEmail() {
@@ -170,6 +194,12 @@ export default class Account extends Vue {
           type: 'success',
         });
       });
+  }
+
+  getUserScholarPaymentAccount() {
+    Api.getPaymentAccount().then((response) => {
+      this.scholarPaymentAccountBalance = response.data.account.balance;
+    });
   }
 
   getUserInformation() {
@@ -362,12 +392,13 @@ export default class Account extends Vue {
   }
 
   .card-subtitle {
+    margin-top: 4px;
     @extend .text-body;
     @extend .text-left;
   }
 
   .list-title {
-    @extend .text-body-small;
+    @extend .text-body;
     @extend .text-left;
   }
 
@@ -381,6 +412,10 @@ export default class Account extends Vue {
   }
 
   .account-information-card {
+    margin-top: 32px;
+  }
+
+  .payment-information-card {
     margin-top: 32px;
   }
 

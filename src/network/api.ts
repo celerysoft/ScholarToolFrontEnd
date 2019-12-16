@@ -33,6 +33,8 @@ class Api {
 
   readonly SERVICE_PAYMENT_METHOD_URL: string = 'service/payment_method';
 
+  readonly USER_SCHOLAR_ACCOUNT_URL: string = 'user/scholar-payment-account';
+
   private axios: AxiosInstance;
 
   constructor() {
@@ -166,10 +168,13 @@ class Api {
     });
   }
 
-  public getSelfInformation(): AxiosPromise {
-    return this.axios.get(this.USER_URL, {
-      showError: true,
-    });
+  public getSelfInformation(config?: AxiosRequestConfig): AxiosPromise {
+    if (!config) {
+      config = {
+        showError: true,
+      };
+    }
+    return this.axios.get(this.USER_URL, config);
   }
 
   public modifyPassword(oldPassword: string, newPassword: string): AxiosPromise {
@@ -333,6 +338,10 @@ class Api {
 
   public getPaymentMethods(): AxiosPromise {
     return this.axios.get(this.SERVICE_PAYMENT_METHOD_URL);
+  }
+
+  public getPaymentAccount(config?: AxiosRequestConfig): AxiosPromise {
+    return this.axios.get(this.USER_SCHOLAR_ACCOUNT_URL, config);
   }
 }
 
