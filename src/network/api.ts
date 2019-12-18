@@ -336,8 +336,16 @@ class Api {
     });
   }
 
-  public getPaymentMethods(): AxiosPromise {
-    return this.axios.get(this.SERVICE_PAYMENT_METHOD_URL);
+  public payOrder(orderUuid: string, paymentMethodUuid: string,
+    config?: AxiosRequestConfig): AxiosPromise {
+    return this.axios.put(this.SERVICE_ORDER_URL, {
+      trade_order_uuid: orderUuid,
+      payment_method_uuid: paymentMethodUuid,
+    }, config);
+  }
+
+  public getPaymentMethods(config?: AxiosRequestConfig): AxiosPromise {
+    return this.axios.get(this.SERVICE_PAYMENT_METHOD_URL, config);
   }
 
   public getPaymentAccount(config?: AxiosRequestConfig): AxiosPromise {

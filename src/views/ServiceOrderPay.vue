@@ -116,10 +116,15 @@
           <div :class="{ 'text-color-secondary': !isPaymentMethodValid(paymentMethod.status) }">
             {{ paymentMethod.name }}
           </div>
-          <el-radio v-model="paymentMethodUuid" :label="paymentMethod.uuid"
-                    :disabled="!isPaymentMethodValid(paymentMethod.status)">
-            <span></span>
-          </el-radio>
+          <div>
+            <span v-if="paymentMethod.name === '学术积分账户余额' && scholarPaymentAccount">
+              {{ scholarPaymentAccount.balance }} 学术积分
+            </span>
+            <el-radio v-model="paymentMethodUuid" :label="paymentMethod.uuid"
+                      :disabled="!isPaymentMethodValid(paymentMethod.status)">
+              <span></span>
+            </el-radio>
+          </div>
         </div>
       </div>
     </div>
@@ -140,7 +145,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import formatTradeOrderApiResponse, {
   TradeOrderApiResponse,
-  TradeOrderResponse,
+  TradeOrderResponse, TradeOrderStatus,
 } from '@/network/response/trade-order';
 import formatSnapshotApiResponse, {
   SnapshotApiResponse,
@@ -155,6 +160,10 @@ import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
 import { GlobalEvent } from '@/toolkits/constant';
 import MutationTypes from '@/store/mutation-types';
+import formatScholarPaymentAccountApiResponse, {
+  ScholarPaymentAccountApiResponse,
+  ScholarPaymentAccountResponse,
+} from '@/network/response/scholar-payment-account';
 
 @Component({
   components: {
@@ -172,6 +181,12 @@ export default class ServiceSubscribeOrder extends Vue {
   paymentMethods: PaymentMethodResponse[] = [];
 
   paymentMethodUuid: string = '';
+
+  scholarPaymentAccount: ScholarPaymentAccountResponse | null = null;
+
+  checkResultCount: number = 0;
+
+  checkOrderStatusInterval: number = NaN;
 
   // eslint-disable-next-line class-methods-use-this
   isPaymentMethodValid(status: number) {
@@ -239,6 +254,12 @@ export default class ServiceSubscribeOrder extends Vue {
       }
     });
 
+    Api.getPaymentAccount().then((response) => {
+      this.scholarPaymentAccount = formatScholarPaymentAccountApiResponse(
+        response.data.account as ScholarPaymentAccountApiResponse,
+      );
+    });
+
     this.$store.commit(MutationTypes.ON_LOADING_COMPLETED);
   }
 
@@ -255,7 +276,61 @@ export default class ServiceSubscribeOrder extends Vue {
   }
 
   payOrder() {
-    console.log(this.isMonthlyService);
+    this.$store.commit(MutationTypes.LOADING);
+    Api.payOrder(this.serviceOrderUuid, this.paymentMethodUuid, {
+      showError: true,
+    })
+      .then((response) => {
+        this.checkPayResult();
+      });
+  }
+
+  checkPayResult() {
+    this.checkResultCount = 0;
+    this.checkOrderStatusInterval = setInterval(this.checkPayResultAction, 3000);
+  }
+
+  checkPayResultAction() {
+    this.checkResultCount += 1;
+    if (this.checkResultCount > 3) {
+      this.payFailed();
+      return;
+    }
+    Api.getOrder(this.serviceOrderUuid)
+      .then((orderResponse) => {
+        const order: TradeOrderResponse = formatTradeOrderApiResponse(
+          orderResponse.data.order as TradeOrderApiResponse,
+        );
+        if (order.status === TradeOrderStatus.finish) {
+          this.paySuccess();
+        }
+      });
+  }
+
+  paySuccess() {
+    this.$notify({
+      title: '订单支付成功',
+      message: '我们正在后台为您开通学术服务，通常在3分钟内开通完毕，如果学术服务长时间没有开通成功，请联系客服',
+      type: 'success',
+      duration: 10000,
+    });
+    this.payFinally();
+  }
+
+  payFailed() {
+    this.$notify({
+      title: '订单支付请求已提交',
+      message: '支付系统暂时没有返回支付结果，请耐心等待支付结果，不要重复支付，如果学术服务长时间没有开通成功，请联系客服',
+      type: 'warning',
+      duration: 10000,
+    });
+    this.payFinally();
+  }
+
+  payFinally() {
+    this.$store.commit(MutationTypes.ON_LOADING_COMPLETED);
+    clearInterval(this.checkOrderStatusInterval);
+    this.$router.push('/service/');
   }
 }
 </script>

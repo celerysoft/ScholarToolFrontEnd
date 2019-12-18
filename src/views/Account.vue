@@ -134,6 +134,10 @@ import MutationTypes from '@/store/mutation-types';
 import { MenuIndex, UserStatus } from '@/toolkits/constant';
 import formatUserApiResponse, { UserApiResponse, UserResponse } from '@/network/response/user';
 import Footer from '@/components/Footer.vue';
+import formatScholarPaymentAccountApiResponse, {
+  ScholarPaymentAccountApiResponse,
+  ScholarPaymentAccountResponse,
+} from '@/network/response/scholar-payment-account';
 
 @Component({
   components: { Footer },
@@ -156,7 +160,7 @@ export default class Account extends Vue {
 
   confirmEmail: string = '';
 
-  scholarPaymentAccountBalance: number = 0;
+  scholarPaymentAccount: ScholarPaymentAccountResponse | null = null;
 
   get username() {
     return this.$store.getters.username;
@@ -172,6 +176,14 @@ export default class Account extends Vue {
 
   get registerDate() {
     return this.$store.getters.registerDate;
+  }
+
+  get scholarPaymentAccountBalance() {
+    if (this.scholarPaymentAccount) {
+      return this.scholarPaymentAccount.balance;
+    }
+
+    return 0;
   }
 
   mounted() {
@@ -198,7 +210,9 @@ export default class Account extends Vue {
 
   getUserScholarPaymentAccount() {
     Api.getPaymentAccount().then((response) => {
-      this.scholarPaymentAccountBalance = response.data.account.balance;
+      this.scholarPaymentAccount = formatScholarPaymentAccountApiResponse(
+        response.data.account as ScholarPaymentAccountApiResponse,
+      );
     });
   }
 
