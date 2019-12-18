@@ -2,8 +2,8 @@
   <div class="service">
     <el-button type="primary" class="button" @click="subscribeNewService">开通新服务</el-button>
 
-    <el-divider content-position="center">待支付的服务</el-divider>
-    <div>
+    <el-divider v-if="unpaidOrders.length > 0" content-position="center">待支付的服务</el-divider>
+    <div v-if="unpaidOrders.length > 0">
       <el-table :data="unpaidOrders" stripe border>
         <el-table-column
           prop="title"
