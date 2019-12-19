@@ -46,7 +46,7 @@
             <i class="el-icon-user"></i>
             <span>个人信息</span>
           </el-menu-item>
-          <el-menu-item index="4" route="/manage/">
+          <el-menu-item index="4" route="/management/">
             <i class="el-icon-setting"></i>
             <span>后台管理</span>
           </el-menu-item>

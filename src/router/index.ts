@@ -77,6 +77,11 @@ const routes = [
     name: '学术服务详情',
     component: () => import('@/views/ServiceDetail.vue'),
   },
+  {
+    path: '/management/',
+    name: '后台管理',
+    component: () => import('@/views/Management.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',
