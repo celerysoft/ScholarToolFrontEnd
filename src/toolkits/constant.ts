@@ -3,7 +3,7 @@ export enum MenuIndex {
   Event = '1',
   Service = '2',
   Account = '3',
-  Manage = '4'
+  Management = '4'
 }
 
 export enum UserStatus {

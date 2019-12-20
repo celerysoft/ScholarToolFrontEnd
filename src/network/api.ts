@@ -5,6 +5,7 @@ import store from '@/store/index';
 import MutationTypes from '@/store/mutation-types';
 import { ServiceTemplateType } from '@/network/response/service-template';
 import { TradeOrderStatus } from '@/network/response/trade-order';
+import user from '@/network/response/user';
 
 const Axios = require('axios');
 
@@ -34,6 +35,10 @@ class Api {
   readonly SERVICE_PAYMENT_METHOD_URL: string = 'service/payment_method';
 
   readonly USER_SCHOLAR_ACCOUNT_URL: string = 'user/scholar-payment-account';
+
+  readonly MANAGEMENT_USER_URL: string = 'management/user';
+
+  readonly MANAGEMENT_SCHOLAR_PAYMENT_ACCOUNT_URL: string = 'management/scholar-payment-account';
 
   private axios: AxiosInstance;
 
@@ -107,6 +112,23 @@ class Api {
         return Promise.reject(error);
       },
     );
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private deriveConfig(showError: boolean = true, loadingAnimation: boolean = false,
+    config?: AxiosRequestConfig, params?: object): AxiosRequestConfig {
+    if (!config) {
+      config = {
+        showError,
+        loadingAnimation,
+        params,
+      };
+    } else {
+      config.showError = showError;
+      config.loadingAnimation = loadingAnimation;
+      config.params = params;
+    }
+    return config;
   }
 
   public getTodayInHistory(): AxiosPromise {
@@ -350,6 +372,35 @@ class Api {
 
   public getPaymentAccount(config?: AxiosRequestConfig): AxiosPromise {
     return this.axios.get(this.USER_SCHOLAR_ACCOUNT_URL, config);
+  }
+
+  public getUsers(page: number, pageSize: number, showError: boolean = false,
+    loadingAnimation: boolean = false, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      page,
+      page_size: pageSize,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.get(this.MANAGEMENT_USER_URL, config);
+  }
+
+  public getUserScholarPaymentAccount(userUuid: string, showError: boolean = true,
+    loadingAnimation: boolean = false, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      user_uuid: userUuid,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.get(this.MANAGEMENT_SCHOLAR_PAYMENT_ACCOUNT_URL, config);
+  }
+
+  public rechargeUserScholarPaymentAccount(userUuid: string, amount: number,
+    showError: boolean = true, loadingAnimation: boolean = false,
+    config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.patch(this.MANAGEMENT_SCHOLAR_PAYMENT_ACCOUNT_URL, {
+      user_uuid: userUuid,
+      amount,
+    }, config);
   }
 }
 

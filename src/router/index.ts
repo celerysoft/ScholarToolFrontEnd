@@ -82,6 +82,11 @@ const routes = [
     name: '后台管理',
     component: () => import('@/views/Management.vue'),
   },
+  {
+    path: '/management/user/',
+    name: '用户管理',
+    component: () => import('@/views/ManagementUser.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',
