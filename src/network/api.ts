@@ -12,6 +12,8 @@ const Axios = require('axios');
 class Api {
   readonly TODAY_IN_HISTORY_URL: string = 'today-in-history';
 
+  readonly YESTERDAY_NEWS_URL: string = 'yesterday-news';
+
   readonly LOGIN_URL: string = 'login';
 
   readonly USER_URL: string = 'user';
@@ -138,10 +140,11 @@ class Api {
   }
 
   public getTodayInHistory(): AxiosPromise {
-    return this.axios.get(this.TODAY_IN_HISTORY_URL, {
-      showError: true,
-      loadingAnimation: true,
-    });
+    return this.axios.get(this.TODAY_IN_HISTORY_URL);
+  }
+
+  public getYesterdayNews(): AxiosPromise {
+    return this.axios.get(this.YESTERDAY_NEWS_URL);
   }
 
   public login(username: string, password: string): AxiosPromise {
