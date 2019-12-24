@@ -43,6 +43,11 @@ const routes = [
     component: () => import('@/views/Account.vue'),
   },
   {
+    path: '/account/:uuid/',
+    name: '用户信息',
+    component: () => import('@/views/Account.vue'),
+  },
+  {
     path: '/activation/',
     name: '激活账户',
     component: () => import('@/views/Activation.vue'),

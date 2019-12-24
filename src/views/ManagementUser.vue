@@ -12,6 +12,11 @@
         prop="username"
         label="用户名"
         width="180">
+        <template slot-scope="scope">
+          <el-button type="text" size="mini" @click="checkUser(scope.row.uuid)">
+            {{ scope.row.username }}
+          </el-button>
+        </template>
       </el-table-column>
       <el-table-column
         prop="email"
@@ -99,9 +104,13 @@ export default class ManagementUser extends Vue {
   }
 
   getData() {
-    Api.getUsers(1, 10, true, true).then((response) => {
+    Api.getUsers(1, 10).then((response) => {
       this.users = (response.data.users as UserApiResponse[]).map(formatUserApiResponse);
     });
+  }
+
+  checkUser(uuid: string) {
+    this.$router.push(`/account/${uuid}/`);
   }
 
   openScholarBalanceDialogDialog(userUuid: string) {

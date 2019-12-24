@@ -66,6 +66,7 @@ export default new Vuex.Store({
     isActivated: state => state.userStatus === 1,
     username: state => state.username,
     email: state => state.email,
+    userUuid: state => state.uuid,
     userStatus: state => state.userStatus,
     registerDate: state => state.registerDate,
     activatedMenuIndex: state => state.activatedMenuIndex,

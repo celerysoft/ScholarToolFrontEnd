@@ -124,9 +124,15 @@ class Api {
         params,
       };
     } else {
-      config.showError = showError;
-      config.loadingAnimation = loadingAnimation;
-      config.params = params;
+      if (!config.showError) {
+        config.showError = showError;
+      }
+      if (!config.loadingAnimation) {
+        config.loadingAnimation = loadingAnimation;
+      }
+      if (!config.params) {
+        config.params = params;
+      }
     }
     return config;
   }
@@ -188,6 +194,13 @@ class Api {
       showError: true,
       loadingAnimation: true,
     });
+  }
+
+  public getUserInformation(userUuid: string, config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(true, true, undefined, {
+      uuid: userUuid,
+    });
+    return this.axios.get(this.USER_URL, config);
   }
 
   public getSelfInformation(config?: AxiosRequestConfig): AxiosPromise {
