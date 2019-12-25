@@ -92,6 +92,11 @@ const routes = [
     name: '用户管理',
     component: () => import('@/views/ManagementUser.vue'),
   },
+  {
+    path: '/management/invitation/',
+    name: '邀请码管理',
+    component: () => import('@/views/ManagementInvitationCode.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',

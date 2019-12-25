@@ -42,6 +42,8 @@ class Api {
 
   readonly MANAGEMENT_SCHOLAR_PAYMENT_ACCOUNT_URL: string = 'management/scholar-payment-account';
 
+  readonly MANAGEMENT_INVITATION_CODE_URL: string = 'management/invitation';
+
   private axios: AxiosInstance;
 
   constructor() {
@@ -417,6 +419,22 @@ class Api {
       user_uuid: userUuid,
       amount,
     }, config);
+  }
+
+  public getInvitationCodes(page: number, pageSize: number, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      page,
+      page_size: pageSize,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.get(this.MANAGEMENT_INVITATION_CODE_URL, config);
+  }
+
+  public createInvitationCode(showError: boolean = true, loadingAnimation: boolean = true,
+    config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.post(this.MANAGEMENT_INVITATION_CODE_URL, config);
   }
 }
 
