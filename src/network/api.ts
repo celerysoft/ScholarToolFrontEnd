@@ -44,6 +44,8 @@ class Api {
 
   readonly MANAGEMENT_INVITATION_CODE_URL: string = 'management/invitation';
 
+  readonly MANAGEMENT_SERVICE_TEMPLATE_URL: string = 'management/service/template';
+
   private axios: AxiosInstance;
 
   constructor() {
@@ -435,6 +437,25 @@ class Api {
     config?: AxiosRequestConfig): AxiosPromise {
     config = this.deriveConfig(showError, loadingAnimation, config);
     return this.axios.post(this.MANAGEMENT_INVITATION_CODE_URL, config);
+  }
+
+  public getServiceTemplateForManagement(page: number, pageSize: number, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      page,
+      page_size: pageSize,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.get(this.MANAGEMENT_SERVICE_TEMPLATE_URL, config);
+  }
+
+  public deleteServiceTemplateForManagement(uuid: string, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      uuid,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.delete(this.MANAGEMENT_SERVICE_TEMPLATE_URL, config);
   }
 }
 

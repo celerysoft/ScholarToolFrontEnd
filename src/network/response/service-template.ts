@@ -29,6 +29,8 @@ export interface ServiceTemplateResponse extends ServiceTemplateApiResponse {
 
   packageDescription: string;
 
+  statusDescription: string;
+
   createdAtDescription: string;
 }
 
@@ -57,6 +59,20 @@ function formatBandwidthToString(bandwidth: number): string {
   return `${(formatBandwidth / 1024).toFixed(2)} GB`;
 }
 
+function formatStatus(status: number): string {
+  const statusTextMap: Map<number, string> = new Map([
+    [0, '初始化'],
+    [1, '有效'],
+    [2, '作废'],
+    [3, '下架'],
+  ]);
+  let statusDescription: string | undefined = statusTextMap.get(status);
+  if (typeof statusDescription === 'undefined') {
+    statusDescription = '未知状态';
+  }
+  return statusDescription;
+}
+
 export default function formatServiceTemplateApiResponse(
   serviceTemplate: ServiceTemplateApiResponse,
 ): ServiceTemplateResponse {
@@ -64,10 +80,12 @@ export default function formatServiceTemplateApiResponse(
   const date = new Date(serviceTemplate.created_at);
   const createdAtDescription = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
   const packageDescription: string = formatBandwidthToString(serviceTemplate.package);
+  const statusDescription: string = formatStatus(serviceTemplate.status);
 
   return Object.assign(serviceTemplate, {
     typeDescription,
     createdAtDescription,
     packageDescription,
+    statusDescription,
   });
 }

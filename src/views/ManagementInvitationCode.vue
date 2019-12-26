@@ -1,5 +1,5 @@
 <template>
-  <div class="management-user-view">
+  <div class="management-invitation-code-view">
     <el-button type="primary" class="create-new-code-button" @click="createInvitationCode">
       生成邀请码
     </el-button>
@@ -106,7 +106,7 @@ export default class ManagementInvitationCode extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .management-user-view {
+  .management-invitation-code-view {
     margin: 0 auto;
     min-height: 100%;
     max-width: 960px;
