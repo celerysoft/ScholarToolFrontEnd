@@ -3,7 +3,10 @@ import { Notification } from 'element-ui';
 import { AxiosInstance, AxiosPromise, AxiosRequestConfig } from 'axios';
 import store from '@/store/index';
 import MutationTypes from '@/store/mutation-types';
-import { ServiceTemplateType } from '@/network/response/service-template';
+import {
+  ServiceTemplateApiResponse,
+  ServiceTemplateType,
+} from '@/network/response/service-template';
 import { TradeOrderStatus } from '@/network/response/trade-order';
 import user from '@/network/response/user';
 
@@ -456,6 +459,13 @@ class Api {
     };
     config = this.deriveConfig(showError, loadingAnimation, config, params);
     return this.axios.delete(this.MANAGEMENT_SERVICE_TEMPLATE_URL, config);
+  }
+
+  public createServiceTemplateForManagement(template: ServiceTemplateApiResponse,
+    showError: boolean = true, loadingAnimation: boolean = true,
+    config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.post(this.MANAGEMENT_SERVICE_TEMPLATE_URL, template, config);
   }
 }
 

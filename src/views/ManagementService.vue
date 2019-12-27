@@ -15,24 +15,28 @@
       <el-table-column
         prop="typeDescription"
         label="类型"
-        width="120">
+        width="100">
       </el-table-column>
       <el-table-column
         prop="title"
         label="标题"
-        width="120">
+        width="200">
       </el-table-column>
       <el-table-column
         prop="statusDescription"
-        label="状态">
+        label="状态"
+        width="100">
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
             size="mini">编辑</el-button>
           <el-button
+            size="mini" type="warning"
+            @click="suspendTemplateHint(scope.row)">下架</el-button>
+          <el-button
             size="mini" type="danger"
-            @click="openScholarBalanceDialogDialog(scope.row.uuid)">删除</el-button>
+            @click="deleteTemplateHint(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -68,8 +72,47 @@ export default class ManagementService extends Vue {
     });
   }
 
+  suspendTemplateHint(template: ServiceTemplateResponse) {
+    this.$confirm(`此操作将下架学术服务『${template.title}』，是否继续?`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }).then(() => {
+      this.suspendTemplate(template);
+    });
+  }
+
+  suspendTemplate(template: ServiceTemplateResponse) {
+    this.$notify({
+      title: '',
+      message: `学术服务『${template.title}』下架成功`,
+      type: 'success',
+    });
+  }
+
+  deleteTemplateHint(template: ServiceTemplateResponse) {
+    this.$confirm(`此操作将删除学术服务『${template.title}』，是否继续?`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }).then(() => {
+      this.deleteTemplate(template);
+    });
+  }
+
+  deleteTemplate(template: ServiceTemplateResponse) {
+    Api.deleteServiceTemplateForManagement(template.uuid)
+      .then((response) => {
+        this.$notify({
+          title: '',
+          message: `已成功删除学术服务『${template.title}』`,
+          type: 'success',
+        });
+      });
+  }
+
   createService() {
-    console.log(this);
+    this.$router.push('/management/service/create/');
   }
 }
 </script>
