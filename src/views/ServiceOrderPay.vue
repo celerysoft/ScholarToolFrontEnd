@@ -134,7 +134,7 @@
                  @click="payOrder">
         支付
       </el-button>
-      <el-button class="btn-cancel" @click="cancelPayment">取消</el-button>
+      <el-button class="btn-cancel" @click="cancelPayment">稍后支付</el-button>
     </div>
     <div class="placeholder"></div>
     <Footer></Footer>

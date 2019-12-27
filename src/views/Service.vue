@@ -29,7 +29,7 @@
                          @click="payOrder(scope.row.uuid)">
                 支付
               </el-button>
-              <el-button class="btn-cancel-order" size="mini"
+              <el-button class="btn-cancel-order" type="warning" size="mini"
                          @click="openCancelOrderPopover(scope.row)">
                 取消订单
               </el-button>

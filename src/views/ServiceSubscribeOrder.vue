@@ -99,12 +99,6 @@
                 {{ serviceTemplate.price + serviceTemplate.initialization_fee }} 学术积分
               </div>
             </div>
-            <div class="order-information-item account-balance-item">
-              <div class="order-information-title">账户余额</div>
-              <div class="order-information-text account-balance">
-                0 学术积分
-              </div>
-            </div>
             <div class="text-body-small text-left">
               如果你有任何疑问可以随时咨询我们的
               <span class="text-color-accent clickable" @click="contactCustomerService">客服</span>
@@ -333,13 +327,6 @@ export default class ServiceSubscribeOrder extends Vue {
 
     .gross-amount {
       font-weight: bold;
-    }
-
-    .account-balance-item {
-      margin: 32px 0;
-      .account-balance {
-        font-weight: bold;
-      }
     }
   }
 

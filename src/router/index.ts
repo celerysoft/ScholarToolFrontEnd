@@ -68,7 +68,7 @@ const routes = [
     component: () => import('@/views/ServiceSubscribe.vue'),
   },
   {
-    path: '/service/subscribe/pay/:uuid/',
+    path: '/service/subscribe/confirm/:uuid/',
     name: '确认订单',
     component: () => import('@/views/ServiceSubscribeOrder.vue'),
   },
