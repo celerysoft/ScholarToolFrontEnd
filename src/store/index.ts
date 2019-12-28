@@ -19,6 +19,7 @@ export default new Vuex.Store({
     registerDate: '',
     isLogin: false,
     activatedMenuIndex: '0',
+    isSideBarCollapse: false,
   },
   mutations: {
     [MutationTypes.ACTIVATION](state) {
@@ -57,6 +58,9 @@ export default new Vuex.Store({
     [MutationTypes.ON_ACTIVATED_MENU_CHANGE](state, activateIndex: string) {
       state.activatedMenuIndex = activateIndex;
     },
+    [MutationTypes.TOGGLE_SIDE_BAR](state) {
+      state.isSideBarCollapse = !state.isSideBarCollapse;
+    },
   },
   actions: {},
   getters: {
@@ -70,6 +74,7 @@ export default new Vuex.Store({
     userStatus: state => state.userStatus,
     registerDate: state => state.registerDate,
     activatedMenuIndex: state => state.activatedMenuIndex,
+    isSideBarCollapse: state => state.isSideBarCollapse,
   },
   plugins: [createPersistedState()],
 });

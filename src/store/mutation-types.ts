@@ -16,4 +16,6 @@ export default class MutationTypes {
   public static ON_ROUTER_CHANGE: string = 'onRouterChange';
 
   public static ON_ACTIVATED_MENU_CHANGE: string = 'onActivatedMenuChange';
+
+  public static TOGGLE_SIDE_BAR: string = 'toggleSideBar';
 }

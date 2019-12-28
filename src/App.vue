@@ -27,7 +27,7 @@
         <el-menu class="side-menu el-menu-vertical"
                  :default-active=activatedMenuIndex
                  :router="true"
-                 :collapse="isCollapse"
+                 :collapse="isSideBarCollapse"
                  @open="handleOpen"
                  @close="handleClose">
           <el-menu-item index="0" route="/">
@@ -56,7 +56,7 @@
           </el-menu-item>
         </el-menu>
         <div class="text-comment sidebar-footer">
-          <span v-if="!isCollapse">©2017-2020 Celery Soft 学术</span>
+          <span v-if="!isSideBarCollapse">©2017-2020 Celery Soft 学术</span>
           <span v-else>©</span>
         </div>
       </el-aside>
@@ -75,7 +75,7 @@
           </span>
         </el-dialog>
 
-        <float-action-button :is-sidebar-collapse="isCollapse">
+        <float-action-button :is-sidebar-collapse="isSideBarCollapse">
           <slot>
             <transition name="fade">
               <div v-if="goTopButtonVisible" class="back-to-top-button">
@@ -112,8 +112,6 @@ import MutationTypes from '@/store/mutation-types';
 })
 
 export default class App extends Vue {
-  isCollapse: boolean;
-
   elAsideWidth: number;
 
   logoutDialogVisible: boolean;
@@ -153,9 +151,12 @@ export default class App extends Vue {
     return this.$store.getters.activatedMenuIndex;
   }
 
+  get isSideBarCollapse() {
+    return this.$store.getters.isSideBarCollapse;
+  }
+
   constructor() {
     super();
-    this.isCollapse = false;
     this.elAsideWidth = 300;
     this.logoutDialogVisible = false;
   }
@@ -179,7 +180,7 @@ export default class App extends Vue {
 
   toggleSidebar() {
     if (this.isLogin) {
-      this.isCollapse = !this.isCollapse;
+      this.$store.commit(MutationTypes.TOGGLE_SIDE_BAR);
     }
   }
 
