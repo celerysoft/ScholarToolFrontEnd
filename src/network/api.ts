@@ -319,14 +319,13 @@ class Api {
     });
   }
 
-  public getServiceTemplate(uuid: string): AxiosPromise {
-    return this.axios.get(this.SERVICE_TEMPLATE_URL, {
-      showError: true,
-      loadingAnimation: true,
-      params: {
-        uuid,
-      },
-    });
+  public getServiceTemplate(uuid: string, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      uuid,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.get(this.SERVICE_TEMPLATE_URL, config);
   }
 
   public createOrder(uuid: string, password: string, autoRenew: boolean | null): AxiosPromise {
@@ -466,6 +465,13 @@ class Api {
     config?: AxiosRequestConfig): AxiosPromise {
     config = this.deriveConfig(showError, loadingAnimation, config);
     return this.axios.post(this.MANAGEMENT_SERVICE_TEMPLATE_URL, template, config);
+  }
+
+  public updateServiceTemplateForManagement(template: ServiceTemplateApiResponse,
+    showError: boolean = true, loadingAnimation: boolean = true,
+    config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.put(this.MANAGEMENT_SERVICE_TEMPLATE_URL, template, config);
   }
 }
 

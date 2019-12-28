@@ -30,6 +30,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
+            @click="editTemplate(scope.row.uuid)"
             size="mini">编辑</el-button>
           <el-button
             size="mini" type="warning"
@@ -80,6 +81,10 @@ export default class ManagementService extends Vue {
     }).then(() => {
       this.suspendTemplate(template);
     });
+  }
+
+  editTemplate(uuid: string) {
+    this.$router.push(`/management/service/edit/${uuid}/`);
   }
 
   suspendTemplate(template: ServiceTemplateResponse) {

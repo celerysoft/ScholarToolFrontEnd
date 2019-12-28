@@ -107,6 +107,11 @@ const routes = [
     name: '创建学术服务',
     component: () => import('@/views/ManagementServiceCreate.vue'),
   },
+  {
+    path: '/management/service/edit/:uuid',
+    name: '编辑学术服务',
+    component: () => import('@/views/ManagementServiceEdit.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',

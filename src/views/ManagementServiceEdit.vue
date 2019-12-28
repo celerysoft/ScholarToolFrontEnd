@@ -40,11 +40,12 @@
           <template slot="append">学术积分</template>
         </el-input>
       </el-form-item>
-      <el-form-item label="立即上架">
+      <el-form-item label="上架">
         <el-switch v-model="onSale"></el-switch>
       </el-form-item>
       <el-form-item>
-        <el-button class="btn-create" type="primary" @click="createService">立即创建</el-button>
+        <el-button class="btn-update" type="primary" @click="updateService">修改</el-button>
+        <el-button class="btn-delete" type="danger" @click="deleteService">删除</el-button>
         <el-button @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -70,6 +71,10 @@ import { GlobalEvent } from '@/toolkits/constant';
 })
 
 export default class ManagementService extends Vue {
+  serviceTemplateUuid: string = '';
+
+  serviceTemplate?: ServiceTemplateApiResponse;
+
   serviceType: number = this.serviceTypeMonthly;
 
   title: string = '';
@@ -98,11 +103,96 @@ export default class ManagementService extends Vue {
     return ServiceTemplateType.data;
   }
 
+  mounted() {
+    this.serviceTemplateUuid = this.$route.params.uuid;
+    if (this.serviceTemplateUuid.length === 0) {
+      this.$emit(GlobalEvent.GoBack);
+    }
+
+    this.getData();
+  }
+
+  getData() {
+    Api.getServiceTemplate(this.serviceTemplateUuid)
+      .then((response) => {
+        this.serviceTemplate = response.data.template;
+        this.formatData();
+      })
+      .catch(() => {
+        this.$notify({
+          title: '',
+          message: '获取数据失败，请刷新重试',
+          type: 'error',
+        });
+      });
+  }
+
+  formatData() {
+    const template = this.serviceTemplate as ServiceTemplateApiResponse;
+
+    this.serviceType = template.type;
+
+    this.title = template.title;
+
+    this.subtitle = template.subtitle;
+
+    this.description = template.description;
+
+    const mb: number = 1024 * 1024;
+    const gb: number = 1024 * mb;
+    if (template.package > gb) {
+      this.packageUnit = 'GB';
+      this.packageNumber = template.package / gb;
+    } else {
+      this.packageUnit = 'MB';
+      this.packageNumber = template.package / mb;
+    }
+
+    this.price = template.price;
+
+    this.initializationFee = template.initialization_fee;
+
+    this.onSale = template.status === 1;
+  }
+
   cancel() {
     this.$emit(GlobalEvent.GoBack);
   }
 
-  createService() {
+  deleteService() {
+    if (this.serviceTemplate) {
+      this.$confirm(`此操作将删除学术服务『${this.serviceTemplate.title}』，是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.deleteTemplate(this.serviceTemplate as ServiceTemplateApiResponse);
+      });
+    }
+  }
+
+  deleteTemplate(template: ServiceTemplateApiResponse) {
+    Api.deleteServiceTemplateForManagement(template.uuid)
+      .then((response) => {
+        this.$notify({
+          title: '',
+          message: `已成功删除学术服务『${template.title}』`,
+          type: 'success',
+        });
+        this.$emit(GlobalEvent.GoBack);
+      });
+  }
+
+  updateService() {
+    if (!this.serviceTemplate) {
+      this.$message({
+        showClose: true,
+        message: '原始数据获取失败，无法提交修改，请刷新重试',
+        type: 'error',
+      });
+      return;
+    }
+
     if (this.title.trim().length === 0) {
       this.$message({
         showClose: true,
@@ -172,7 +262,7 @@ export default class ManagementService extends Vue {
       status = 3;
     }
     const template: ServiceTemplateApiResponse = {
-      uuid: '',
+      uuid: this.serviceTemplateUuid,
       type: this.serviceType,
       title: this.title.trim(),
       subtitle: this.subtitle.trim(),
@@ -184,11 +274,11 @@ export default class ManagementService extends Vue {
       created_at: '',
       updated_at: '',
     };
-    Api.createServiceTemplateForManagement(template)
+    Api.updateServiceTemplateForManagement(template)
       .then((response) => {
         this.$notify({
           title: '',
-          message: `学术服务『${template.title}』创建成功`,
+          message: `学术服务『${template.title}』修改成功`,
           type: 'success',
         });
         this.$emit(GlobalEvent.GoBack);
@@ -231,7 +321,11 @@ export default class ManagementService extends Vue {
     }
   }
 
-  .btn-create {
+  .btn-update {
+    margin-right: 16px;
+  }
+
+  .btn-delete {
     margin-right: 16px;
   }
 </style>
