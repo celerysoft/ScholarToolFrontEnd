@@ -112,6 +112,15 @@ const routes = [
     name: '编辑学术服务',
     component: () => import('@/views/ManagementServiceEdit.vue'),
   },
+  {
+    path: '/404/',
+    name: '页面不存在',
+    component: () => import('@/views/NotFound.vue'),
+  },
+  {
+    path: '*',
+    redirect: '/404/',
+  },
   // {
   //   path: '/about',
   //   name: 'about',
