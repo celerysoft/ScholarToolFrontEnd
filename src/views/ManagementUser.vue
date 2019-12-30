@@ -13,7 +13,7 @@
         label="用户名"
         width="180">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="checkUser(scope.row.uuid)">
+          <el-button type="text" @click="checkUser(scope.row.uuid)">
             {{ scope.row.username }}
           </el-button>
         </template>

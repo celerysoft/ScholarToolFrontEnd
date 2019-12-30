@@ -16,7 +16,7 @@
         label="邀请者"
         width="120">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="checkUser(scope.row.inviter_uuid)">
+          <el-button type="text" @click="checkUser(scope.row.inviter_uuid)">
             {{ scope.row.inviter_username }}
           </el-button>
         </template>
@@ -26,7 +26,7 @@
         width="120">
         <template slot-scope="scope">
           <el-button v-if="scope.row.invitee_uuid && scope.row.invitee_uuid.length > 0"
-                     type="text" size="mini" @click="checkUser(scope.row.invitee_uuid)">
+                     type="text" @click="checkUser(scope.row.invitee_uuid)">
             {{ scope.row.invitee_username }}
           </el-button>
         </template>

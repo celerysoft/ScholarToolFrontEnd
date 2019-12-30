@@ -3,7 +3,9 @@
     <el-button type="primary" class="create-new-code-button" @click="createService">
       创建套餐
     </el-button>
+    <!--
     <el-divider content-position="center"></el-divider>
+    -->
     <el-table
       class="codes-table"
       :data="services"
@@ -108,6 +110,8 @@ export default class ManagementService extends Vue {
   deleteTemplate(template: ServiceTemplateResponse) {
     Api.deleteServiceTemplateForManagement(template.uuid)
       .then((response) => {
+        const index = this.services.indexOf(template);
+        this.services.splice(index, 1);
         this.$notify({
           title: '',
           message: `已成功删除学术服务『${template.title}』`,
@@ -143,6 +147,7 @@ export default class ManagementService extends Vue {
   }
 
   .codes-table {
+    margin-top: 24px;
     width: 100%;
   }
 </style>
