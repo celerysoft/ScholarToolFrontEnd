@@ -49,6 +49,8 @@ class Api {
 
   readonly MANAGEMENT_SERVICE_TEMPLATE_URL: string = 'management/service/template';
 
+  readonly MANAGEMENT_EVENT_URL: string = 'management/event';
+
   private axios: AxiosInstance;
 
   constructor() {
@@ -231,11 +233,14 @@ class Api {
     });
   }
 
-  public getEvents(): AxiosPromise {
-    return this.axios.get(this.EVENT_URL, {
-      showError: true,
-      loadingAnimation: true,
-    });
+  public getEvents(page: number, pageSize: number, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      page,
+      page_size: pageSize,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.get(this.EVENT_URL, config);
   }
 
   public getEvent(uuid: string): AxiosPromise {
@@ -472,6 +477,25 @@ class Api {
     config?: AxiosRequestConfig): AxiosPromise {
     config = this.deriveConfig(showError, loadingAnimation, config);
     return this.axios.put(this.MANAGEMENT_SERVICE_TEMPLATE_URL, template, config);
+  }
+
+  public getEventsForManagement(page: number, pageSize: number, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      page,
+      page_size: pageSize,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.get(this.MANAGEMENT_EVENT_URL, config);
+  }
+
+  public deleteEventForManagement(uuid: string, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    const params = {
+      uuid,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config, params);
+    return this.axios.delete(this.MANAGEMENT_EVENT_URL, config);
   }
 }
 

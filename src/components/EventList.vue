@@ -10,7 +10,7 @@
 
         <div class="list-content">
           <div class="text-comment text-color-secondary">
-            发布于{{ item.createAt }}
+            发布于{{ item.createdAt }}
           </div>
           <br>
           {{ item.summary }}
@@ -22,12 +22,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { EventExResponse } from '@/network/response/event';
+import { EventResponse } from '@/network/response/event';
 
 @Component
 export default class EventList extends Vue {
     @Prop()
-    private data?: EventExResponse[];
+    private data?: EventResponse[];
 
     handleListItemClick(index: number) {
       this.$emit('item-click', index);

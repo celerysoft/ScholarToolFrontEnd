@@ -13,7 +13,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Route } from 'vue-router';
 import MutationTypes from '@/store/mutation-types';
 import { MenuIndex } from '@/toolkits/constant'; // @ is an alias to /src
-import getEventExFromEvent, { EventResponse, EventExResponse } from '@/network/response/event';
+import formatEventApiResponse, { EventApiResponse, EventResponse } from '@/network/response/event';
 import EventList from '@/components/EventList.vue';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
@@ -26,7 +26,7 @@ import Api from '@/network/api';
 })
 
 export default class Event extends Vue {
-    events: EventExResponse[] = [];
+    events: EventResponse[] = [];
 
     /* eslint-disable class-methods-use-this */
     // beforeRouteEnter(to: Route, from: Route, next: any) {
@@ -45,9 +45,9 @@ export default class Event extends Vue {
     }
 
     getEvents() {
-      Api.getEvents()
+      Api.getEvents(1, 10)
         .then((response) => {
-          this.events = (response.data.events as EventResponse[]).map(getEventExFromEvent);
+          this.events = (response.data.events as EventApiResponse[]).map(formatEventApiResponse);
         });
     }
 

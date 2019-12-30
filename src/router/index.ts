@@ -113,6 +113,11 @@ const routes = [
     component: () => import('@/views/ManagementServiceEdit.vue'),
   },
   {
+    path: '/management/event/',
+    name: '公告管理',
+    component: () => import('@/views/ManagementEvent.vue'),
+  },
+  {
     path: '/404/',
     name: '页面不存在',
     component: () => import('@/views/NotFound.vue'),

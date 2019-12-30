@@ -1,4 +1,5 @@
-export interface EventResponse {
+/* eslint-disable camelcase */
+export interface EventApiResponse {
   uuid: string
 
   title: string
@@ -7,16 +8,20 @@ export interface EventResponse {
 
   content: string
 
-  /* eslint-disable-next-line camelcase */
   created_at: string
+
+  author_uuid: string
+
+  author_username?: string
+}
+/* eslint-enable camelcase */
+
+export interface EventResponse extends EventApiResponse {
+  createdAt: string;
 }
 
-export interface EventExResponse extends EventResponse {
-  createAt: string;
-}
-
-export default function getEventExFromEvent(event: EventResponse): EventExResponse {
+export default function formatEventApiResponse(event: EventApiResponse): EventResponse {
   const date = new Date(event.created_at);
-  const createAt = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-  return Object.assign(event, { createAt });
+  const createdAt = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+  return Object.assign(event, { createdAt });
 }

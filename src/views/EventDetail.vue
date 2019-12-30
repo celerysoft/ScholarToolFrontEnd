@@ -2,7 +2,7 @@
   <div class="root">
     <div class="event" v-if="event">
       <div class="title">{{ event.title }}</div>
-      <div class="created-at">发表于{{ event.createAt }}</div>
+      <div class="created-at">发表于{{ event.createdAt }}</div>
       <vue-markdown class="markdown">{{ event.content }}</vue-markdown>
     </div>
     <div class="placeholder"></div>
@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import getEventExFromEvent, { EventResponse, EventExResponse } from '@/network/response/event';
+import formatEventApiResponse, { EventApiResponse, EventResponse } from '@/network/response/event';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
 
@@ -26,7 +26,7 @@ const VueMarkdown = require('vue-markdown').default;
 })
 
 export default class EventDetail extends Vue {
-  event: EventExResponse | null = null;
+  event: EventResponse | null = null;
 
   eventUuid: string = '';
 
@@ -37,7 +37,7 @@ export default class EventDetail extends Vue {
 
   getEvent(uuid: string) {
     Api.getEvent(uuid).then((response) => {
-      this.event = getEventExFromEvent(response.data.event as EventResponse);
+      this.event = formatEventApiResponse(response.data.event as EventApiResponse);
     });
   }
 }
