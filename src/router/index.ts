@@ -123,6 +123,11 @@ const routes = [
     component: () => import('@/views/ManagementEventCreate.vue'),
   },
   {
+    path: '/management/event/edit/:uuid/',
+    name: '修改公告',
+    component: () => import('@/views/ManagementEventEdit.vue'),
+  },
+  {
     path: '/404/',
     name: '页面不存在',
     component: () => import('@/views/NotFound.vue'),

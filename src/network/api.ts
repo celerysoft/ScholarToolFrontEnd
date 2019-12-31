@@ -505,6 +505,13 @@ class Api {
     config = this.deriveConfig(showError, loadingAnimation, config);
     return this.axios.post(this.MANAGEMENT_EVENT_URL, event, config);
   }
+
+  public updateEventForManagement(event: EventApiResponse,
+    showError: boolean = true, loadingAnimation: boolean = true,
+    config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.put(this.MANAGEMENT_EVENT_URL, event, config);
+  }
 }
 
 export default new Api();

@@ -1,5 +1,5 @@
 <template>
-  <div class="management-event-create-view">
+  <div class="management-event-edit-view">
     <el-form class="publish-event-form text-left" ref="form" label-width="80px">
       <el-form-item label="标题">
         <el-input v-model="title" placeholder="请输入标题"></el-input>
@@ -8,10 +8,10 @@
         <el-input v-model="summary" placeholder="请输入摘要" type="textarea" autosize></el-input>
       </el-form-item>
       <el-form-item label="正文">
-        <markdown-editor v-model="content" toolbar-location="bottom"></markdown-editor>
+        <markdown-editor v-model="content" toolbar-location="both"></markdown-editor>
       </el-form-item>
       <el-form-item>
-        <el-button class="btn-create" type="primary" @click="publishEvent">立即发布</el-button>
+        <el-button class="btn-create" type="primary" @click="updateEvent">更新公告</el-button>
         <el-button @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -37,18 +37,65 @@ import MarkdownEditor from '@/components/MarkdownEditor.vue';
   },
 })
 
-export default class ManagementService extends Vue {
+export default class ManagementEventEdit extends Vue {
+  eventUuid: string = '';
+
+  event?: EventApiResponse;
+
   title: string = '';
 
   summary: string = '';
 
   content: string = '# 直接写正文，无需重复标题';
 
+  mounted() {
+    this.eventUuid = this.$route.params.uuid;
+    if (this.eventUuid.length === 0) {
+      this.$emit(GlobalEvent.GoBack);
+    }
+
+    this.getData();
+  }
+
+  getData() {
+    Api.getEvent(this.eventUuid)
+      .then((response) => {
+        this.event = response.data.event;
+        this.formatData();
+      })
+      .catch(() => {
+        this.$notify({
+          title: '',
+          message: '获取数据失败，请刷新重试',
+          type: 'error',
+        });
+      });
+  }
+
+  formatData() {
+    const event = this.event as EventApiResponse;
+
+    this.title = event.title;
+
+    this.summary = event.summary;
+
+    this.content = event.content;
+  }
+
   cancel() {
     this.$emit(GlobalEvent.GoBack);
   }
 
-  publishEvent() {
+  updateEvent() {
+    if (!this.event) {
+      this.$message({
+        showClose: true,
+        message: '原始数据获取失败，无法提交修改，请刷新重试',
+        type: 'error',
+      });
+      return;
+    }
+
     if (this.title.trim().length === 0) {
       this.$message({
         showClose: true,
@@ -77,18 +124,18 @@ export default class ManagementService extends Vue {
     }
 
     const event: EventApiResponse = {
-      uuid: '',
+      uuid: this.eventUuid,
       title: this.title.trim(),
       summary: this.summary.trim(),
       content: this.content.trim(),
       author_uuid: this.$store.getters.userUuid,
       created_at: '',
     };
-    Api.publishEventForManagement(event)
+    Api.updateEventForManagement(event)
       .then((response) => {
         this.$notify({
           title: '',
-          message: `公告『${event.title}』发布成功`,
+          message: `公告『${event.title}』更新成功`,
           type: 'success',
         });
         this.$emit(GlobalEvent.GoBack);
@@ -98,7 +145,7 @@ export default class ManagementService extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .management-event-create-view {
+  .management-event-edit-view {
     margin: 0 auto;
     min-height: 100%;
     max-width: 960px;

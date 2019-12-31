@@ -1,6 +1,6 @@
 <template>
   <div class="markdown-editor-component">
-    <div v-if="toolbarLocation === 'top'" class="toolbar">
+    <div v-if="toolbarLocation === 'top' || toolbarLocation === 'both'" class="toolbar">
       <el-switch
         class="btn-enable-preview"
         v-model="enablePreview"
@@ -19,7 +19,7 @@
       <vue-markdown v-if="enablePreview" :source="value" class="preview markdown-preview">
       </vue-markdown>
     </div>
-    <div v-if="toolbarLocation !== 'top'" class="bottom-bar">
+    <div v-if="toolbarLocation === 'bottom' || toolbarLocation === 'both'" class="bottom-bar">
       <el-switch
         class="btn-enable-preview"
         v-model="enablePreview"
@@ -38,7 +38,11 @@
       :visible.sync="fullscreenPreview"
       :before-close="handleDrawerClose">
       <div class="fullscreen-preview-view">
-        <vue-markdown :source="value" class="fullscreen-preview markdown"></vue-markdown>
+        <div class="box">
+          <div class="box-in">
+            <vue-markdown :source="value" class="fullscreen-preview markdown"></vue-markdown>
+          </div>
+        </div>
         <el-button class="btn-disable-fullscreen-preview" type="primary" plain
                    @click="handleDrawerClose">
           关闭预览
@@ -50,7 +54,7 @@
 
 <script lang="ts">
 import {
-  Component, Prop, Model, Watch, Vue,
+  Component, Prop, Vue,
 } from 'vue-property-decorator';
 
 const VueMarkdown = require('vue-markdown').default;
@@ -66,7 +70,7 @@ export default class MarkdownEditor extends Vue {
   value?: string;
 
   @Prop()
-  toolbarLocation?: 'top' | 'bottom';
+  toolbarLocation?: 'top' | 'bottom' | 'both';
 
   enablePreview: boolean = true;
 
@@ -169,8 +173,26 @@ export default class MarkdownEditor extends Vue {
     margin-right: 8px;
   }
 
-  .fullscreen-preview-view {
+  .box{
+    width: 96%;
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 128px;
+    overflow-x: hidden;
+    /*background: #e6e6e6;*/
+    flex-grow: 1;
+  }
+
+  .box-in{
+    width: 100%;
     min-height: 100%;
+    /*height: 2500px;*/
+  }
+
+  .fullscreen-preview-view {
+    height: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
     width: 100%;
     display: flex;
     display: -webkit-flex;
@@ -180,9 +202,8 @@ export default class MarkdownEditor extends Vue {
   }
 
   .fullscreen-preview {
-    width: 90%;
+    width: 100%;
     margin-top: -16px;
-    flex-grow: 1;
   }
 
   .btn-disable-fullscreen-preview {
