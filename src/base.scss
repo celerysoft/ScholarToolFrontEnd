@@ -72,6 +72,7 @@ html, body {
 .markdown {
   width: 100%;
   text-align: start;
+
   h1 {
     color: $--color-primary-light-9;
     background-color: $--color-primary;
@@ -82,23 +83,40 @@ html, body {
     text-shadow: none;
     @extend .text-main-title;
   }
+
   h2 {
     border-left: 16px solid $--color-primary-light-5;
     padding-left: 16px;
     text-shadow: none;
     @extend .text-title;
   }
+
   h3 {
     border-left: 4px solid $--color-primary-light-5;
     padding-left: 16px;
     text-shadow: none;
     @extend .text-subtitle;
   }
+
   h4 {
     @extend .text-body;
   }
+
   p {
     @extend .text-body;
     @extend .text-color-primary;
+  }
+}
+
+.markdown-preview {
+  @extend .markdown;
+  h1 {
+    color: $--color-primary-light-9;
+    background-color: $--color-primary;
+    border-left: 16px solid $--color-primary-light-5;
+    margin-left: 0;
+    font-size: $--font-size-extra-large;
+    text-shadow: none;
+    @extend .text-main-title;
   }
 }
