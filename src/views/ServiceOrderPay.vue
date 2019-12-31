@@ -171,7 +171,7 @@ import formatScholarPaymentAccountApiResponse, {
   },
 })
 
-export default class ServiceSubscribeOrder extends Vue {
+export default class ServiceOrderPay extends Vue {
   serviceOrderUuid: string = '';
 
   order: TradeOrderResponse | null = null;

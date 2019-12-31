@@ -69,7 +69,7 @@ import { GlobalEvent } from '@/toolkits/constant';
   },
 })
 
-export default class ManagementService extends Vue {
+export default class ManagementServiceCreate extends Vue {
   serviceType: number = this.serviceTypeMonthly;
 
   title: string = '';

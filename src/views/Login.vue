@@ -72,12 +72,12 @@ export default class Login extends Vue {
     return this.$store.getters.isLogin;
   }
 
-  private reset() {
+  reset() {
     this.username = '';
     this.password = '';
   }
 
-  private doLogin() {
+  doLogin() {
     const username = this.username.trim();
     const password = this.password.trim();
 

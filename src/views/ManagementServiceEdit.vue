@@ -70,7 +70,7 @@ import { GlobalEvent } from '@/toolkits/constant';
   },
 })
 
-export default class ManagementService extends Vue {
+export default class ManagementServiceEdit extends Vue {
   serviceTemplateUuid: string = '';
 
   serviceTemplate?: ServiceTemplateApiResponse;

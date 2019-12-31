@@ -65,7 +65,7 @@ import formatEventApiResponse, { EventApiResponse, EventResponse } from '@/netwo
   },
 })
 
-export default class ManagementService extends Vue {
+export default class ManagementEvent extends Vue {
   events: EventResponse[] = [];
 
   mounted() {
