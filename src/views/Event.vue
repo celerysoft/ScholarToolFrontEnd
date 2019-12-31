@@ -1,8 +1,6 @@
 <template>
-  <div class="event">
-    <div>
-      <event-list :data="events" v-on:item-click="onEventClick"></event-list>
-    </div>
+  <div class="event-view">
+    <event-list :data="events" v-on:item-click="onEventClick"></event-list>
     <div class="placeholder"></div>
     <Footer></Footer>
   </div>
@@ -61,7 +59,7 @@ export default class Event extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .event {
+  .event-view {
     margin: 0 auto;
     min-height: 100%;
     max-width: 960px;

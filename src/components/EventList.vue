@@ -43,6 +43,8 @@ export default class EventList extends Vue {
 </style>
 <style lang="scss" scoped>
   .event-list-root {
+    width: 100%;
+    max-width: 960px;
     display: flex;
     display: -webkit-flex;
     flex-direction: row;
