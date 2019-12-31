@@ -9,6 +9,7 @@ import {
 } from '@/network/response/service-template';
 import { TradeOrderStatus } from '@/network/response/trade-order';
 import user from '@/network/response/user';
+import { EventApiResponse } from '@/network/response/event';
 
 const Axios = require('axios');
 
@@ -496,6 +497,13 @@ class Api {
     };
     config = this.deriveConfig(showError, loadingAnimation, config, params);
     return this.axios.delete(this.MANAGEMENT_EVENT_URL, config);
+  }
+
+  public publishEventForManagement(event: EventApiResponse,
+    showError: boolean = true, loadingAnimation: boolean = true,
+    config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.post(this.MANAGEMENT_EVENT_URL, event, config);
   }
 }
 
