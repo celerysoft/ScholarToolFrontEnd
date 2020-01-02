@@ -239,6 +239,7 @@ class Api {
     const params = {
       page,
       page_size: pageSize,
+      $order_by: 'created_at,desc',
     };
     config = this.deriveConfig(showError, loadingAnimation, config, params);
     return this.axios.get(this.EVENT_URL, config);
@@ -436,6 +437,7 @@ class Api {
     const params = {
       page,
       page_size: pageSize,
+      $order_by: 'created_at,desc',
     };
     config = this.deriveConfig(showError, loadingAnimation, config, params);
     return this.axios.get(this.MANAGEMENT_INVITATION_CODE_URL, config);
@@ -485,6 +487,7 @@ class Api {
     const params = {
       page,
       page_size: pageSize,
+      $order_by: 'created_at,desc',
     };
     config = this.deriveConfig(showError, loadingAnimation, config, params);
     return this.axios.get(this.MANAGEMENT_EVENT_URL, config);
