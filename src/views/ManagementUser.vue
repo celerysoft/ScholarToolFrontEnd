@@ -110,7 +110,7 @@ export default class ManagementUser extends Vue {
   }
 
   checkUser(uuid: string) {
-    this.$router.push(`/account/${uuid}/`);
+    this.$router.push(`/account?uuid=${uuid}`);
   }
 
   openScholarBalanceDialogDialog(userUuid: string) {

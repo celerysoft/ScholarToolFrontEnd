@@ -33,17 +33,12 @@ const routes = [
     component: () => import('@/views/Event.vue'),
   },
   {
-    path: '/event/:uuid/',
+    path: '/event/detail/',
     name: '公告详情',
     component: () => import('@/views/EventDetail.vue'),
   },
   {
     path: '/account/',
-    name: '个人信息',
-    component: () => import('@/views/Account.vue'),
-  },
-  {
-    path: '/account/:uuid/',
     name: '用户信息',
     component: () => import('@/views/Account.vue'),
   },
@@ -68,17 +63,17 @@ const routes = [
     component: () => import('@/views/ServiceSubscribe.vue'),
   },
   {
-    path: '/service/subscribe/confirm/:uuid/',
+    path: '/service/subscribe/preview/',
     name: '确认订单',
     component: () => import('@/views/ServiceSubscribeOrder.vue'),
   },
   {
-    path: '/service/order/pay/:uuid/',
+    path: '/service/order/pay/',
     name: '订单支付',
     component: () => import('@/views/ServiceOrderPay.vue'),
   },
   {
-    path: '/service/:uuid/',
+    path: '/service/detail/',
     name: '学术服务详情',
     component: () => import('@/views/ServiceDetail.vue'),
   },
@@ -108,7 +103,7 @@ const routes = [
     component: () => import('@/views/ManagementServiceCreate.vue'),
   },
   {
-    path: '/management/service/edit/:uuid',
+    path: '/management/service/edit/',
     name: '编辑学术服务',
     component: () => import('@/views/ManagementServiceEdit.vue'),
   },
@@ -123,7 +118,7 @@ const routes = [
     component: () => import('@/views/ManagementEventCreate.vue'),
   },
   {
-    path: '/management/event/edit/:uuid/',
+    path: '/management/event/edit/',
     name: '修改公告',
     component: () => import('@/views/ManagementEventEdit.vue'),
   },

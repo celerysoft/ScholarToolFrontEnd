@@ -84,7 +84,7 @@ export default class ManagementInvitationCode extends Vue {
   }
 
   checkUser(uuid: string) {
-    this.$router.push(`/account/${uuid}/`);
+    this.$router.push(`/account?uuid=${uuid}`);
   }
 
   createInvitationCode() {

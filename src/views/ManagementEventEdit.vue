@@ -49,8 +49,8 @@ export default class ManagementEventEdit extends Vue {
   content: string = '# 直接写正文，无需重复标题';
 
   mounted() {
-    this.eventUuid = this.$route.params.uuid;
-    if (this.eventUuid.length === 0) {
+    this.eventUuid = this.$route.query.uuid as string;
+    if (!this.eventUuid) {
       this.$emit(GlobalEvent.GoBack);
     }
 

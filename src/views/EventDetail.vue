@@ -15,6 +15,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import formatEventApiResponse, { EventApiResponse, EventResponse } from '@/network/response/event';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
+import { GlobalEvent } from '@/toolkits/constant';
 
 const VueMarkdown = require('vue-markdown').default;
 
@@ -31,7 +32,10 @@ export default class EventDetail extends Vue {
   eventUuid: string = '';
 
   mounted() {
-    this.eventUuid = this.$route.params.uuid;
+    this.eventUuid = this.$route.query.uuid as string;
+    if (!this.eventUuid) {
+      this.$emit(GlobalEvent.GoBack);
+    }
     this.getEvent(this.eventUuid);
   }
 

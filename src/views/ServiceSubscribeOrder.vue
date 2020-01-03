@@ -174,7 +174,11 @@ export default class ServiceSubscribeOrder extends Vue {
   }
 
   mounted() {
-    this.serviceTemplateUuid = this.$route.params.uuid;
+    this.serviceTemplateUuid = this.$route.query.template_uuid as string;
+    console.log(this.serviceTemplateUuid);
+    if (!this.serviceTemplateUuid) {
+      this.$emit(GlobalEvent.GoBack);
+    }
 
     if (this.serviceTemplateUuid.length > 0) {
       this.getServiceTemplate(this.serviceTemplateUuid);
@@ -242,7 +246,7 @@ export default class ServiceSubscribeOrder extends Vue {
           type: 'info',
           duration: 10000,
         });
-        this.$router.push(`/service/order/pay/${response.data.uuid}/`);
+        this.$router.push(`/service/order/pay?order_uuid=${response.data.uuid}`);
       });
   }
 }

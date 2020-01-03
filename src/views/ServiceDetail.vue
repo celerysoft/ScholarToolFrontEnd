@@ -175,6 +175,7 @@ import formatServiceApiResponse, {
 } from '@/network/response/service';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
+import { GlobalEvent } from '@/toolkits/constant';
 
 @Component({
   components: {
@@ -225,7 +226,10 @@ export default class ServiceDetail extends Vue {
   }
 
   mounted() {
-    this.serviceUuid = this.$route.params.uuid;
+    this.serviceUuid = this.$route.query.uuid as string;
+    if (!this.serviceUuid) {
+      this.$emit(GlobalEvent.GoBack);
+    }
     this.getService(this.serviceUuid);
   }
 

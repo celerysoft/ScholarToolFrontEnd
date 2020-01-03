@@ -35,8 +35,13 @@
             @click="editTemplate(scope.row.uuid)"
             size="mini">编辑</el-button>
           <el-button
+            v-if="onSale(scope.row)"
             size="mini" type="warning"
             @click="suspendTemplateHint(scope.row)">下架</el-button>
+          <el-button
+            v-else
+            size="mini" type="primary"
+            @click="activateTemplateHint(scope.row)">上架</el-button>
           <el-button
             size="mini" type="danger"
             @click="deleteTemplateHint(scope.row)">删除</el-button>
@@ -75,6 +80,33 @@ export default class ManagementService extends Vue {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  onSale(service: ServiceTemplateResponse): boolean {
+    return service.status === 1;
+  }
+
+  editTemplate(uuid: string) {
+    this.$router.push(`/management/service/edit?uuid=${uuid}`);
+  }
+
+  activateTemplateHint(template: ServiceTemplateResponse) {
+    this.$confirm(`此操作将对学术服务『${template.title}』进行上架操作，是否继续?`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }).then(() => {
+      this.activateTemplate(template);
+    });
+  }
+
+  activateTemplate(template: ServiceTemplateResponse) {
+    this.$notify({
+      title: '',
+      message: `学术服务『${template.title}』上架成功`,
+      type: 'success',
+    });
+  }
+
   suspendTemplateHint(template: ServiceTemplateResponse) {
     this.$confirm(`此操作将下架学术服务『${template.title}』，是否继续?`, '提示', {
       confirmButtonText: '确定',
@@ -83,10 +115,6 @@ export default class ManagementService extends Vue {
     }).then(() => {
       this.suspendTemplate(template);
     });
-  }
-
-  editTemplate(uuid: string) {
-    this.$router.push(`/management/service/edit/${uuid}/`);
   }
 
   suspendTemplate(template: ServiceTemplateResponse) {

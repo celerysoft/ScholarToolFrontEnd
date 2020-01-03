@@ -187,9 +187,8 @@ export default class Account extends Vue {
   scholarPaymentAccount: ScholarPaymentAccountResponse | null = null;
 
   get isSelfAccountPage() {
-    if (this.$route.params.uuid !== undefined && this.$route.params.uuid.length > 0) {
-      console.log(this.$route.params.uuid, this.$store.getters.userUuid);
-      return this.$route.params.uuid === this.$store.getters.userUuid;
+    if (this.$route.query.uuid !== undefined && this.$route.query.uuid.length > 0) {
+      return this.$route.query.uuid === this.$store.getters.userUuid;
     }
 
     return true;
@@ -224,7 +223,8 @@ export default class Account extends Vue {
   }
 
   mounted() {
-    this.targetUserUuid = this.$route.params.uuid;
+    console.log(this.$route.query.uu);
+    this.targetUserUuid = this.$route.query.uuid as string;
 
     this.getData();
 

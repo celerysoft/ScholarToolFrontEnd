@@ -206,7 +206,10 @@ export default class ServiceOrderPay extends Vue {
   }
 
   mounted() {
-    this.serviceOrderUuid = this.$route.params.uuid;
+    this.serviceOrderUuid = this.$route.query.order_uuid as string;
+    if (!this.serviceOrderUuid) {
+      this.$emit(GlobalEvent.GoBack);
+    }
 
     if (this.serviceOrderUuid.length > 0) {
       this.getData(this.serviceOrderUuid);

@@ -104,8 +104,8 @@ export default class ManagementServiceEdit extends Vue {
   }
 
   mounted() {
-    this.serviceTemplateUuid = this.$route.params.uuid;
-    if (this.serviceTemplateUuid.length === 0) {
+    this.serviceTemplateUuid = this.$route.query.uuid as string;
+    if (!this.serviceTemplateUuid) {
       this.$emit(GlobalEvent.GoBack);
     }
 

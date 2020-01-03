@@ -47,6 +47,11 @@
           prop="title"
           label="服务名称"
           width="240">
+          <template slot-scope="scope">
+            <el-button type="text">
+              {{ scope.row.title }}
+            </el-button>
+          </template>
         </el-table-column>
         <el-table-column
           prop="port"
@@ -116,7 +121,7 @@ export default class Service extends Vue {
   onServiceClick(row: ServiceResponse, column: number, event: Event) {
     const { uuid } = row;
     this.$router.push({
-      path: `/service/${uuid}/`,
+      path: `/service/detail?uuid=${uuid}`,
     });
   }
 
@@ -154,7 +159,7 @@ export default class Service extends Vue {
   }
 
   payOrder(uuid: string) {
-    this.$router.push(`/service/order/pay/${uuid}/`);
+    this.$router.push(`/service/order/pay?order_uuid=${uuid}`);
   }
 }
 </script>

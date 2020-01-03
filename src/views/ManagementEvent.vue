@@ -80,15 +80,15 @@ export default class ManagementEvent extends Vue {
   }
 
   checkUser(uuid: string) {
-    this.$router.push(`/account/${uuid}/`);
+    this.$router.push(`/account?uuid=${uuid}`);
   }
 
   checkEvent(uuid: string) {
-    this.$router.push(`/event/${uuid}/`);
+    this.$router.push(`/event/detail?uuid=${uuid}`);
   }
 
   editEvent(uuid: string) {
-    this.$router.push(`/management/event/edit/${uuid}/`);
+    this.$router.push(`/management/event/edit?uuid=${uuid}`);
   }
 
   deleteEventHint(event: EventResponse) {
