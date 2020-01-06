@@ -67,7 +67,8 @@
             </div>
             <div>
               <span class="placeholder"></span>
-              <el-button type="primary" class="btn-renew" plain>
+              <el-button type="primary" class="btn-renew" plain
+                         @click="renewService">
                 续费
               </el-button>
               <span class="placeholder"></span>
@@ -326,6 +327,10 @@ export default class ServiceDetail extends Vue {
         // no op
       });
     }
+  }
+
+  renewService() {
+    this.$router.push(`/service/renew/preview?service_uuid=${this.serviceUuid}`);
   }
 }
 </script>

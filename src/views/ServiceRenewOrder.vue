@@ -59,7 +59,7 @@
                 <el-input
                   placeholder="请输入学术服务连接密码"
                   v-model="servicePassword"
-                  clearable>
+                  clearable disabled>
                 </el-input>
               </div>
             </div>
@@ -89,14 +89,14 @@
             <div class="order-information-item">
               <div class="order-information-title">初装费</div>
               <div class="order-information-text">
-                {{ serviceTemplate.initialization_fee }} 学术积分
+                <del>{{ serviceTemplate.initialization_fee }} 学术积分</del>
               </div>
             </div>
             <div class="divider"></div>
             <div class="order-information-item">
               <div class="order-information-title">总计</div>
               <div class="order-information-text gross-amount">
-                {{ serviceTemplate.price + serviceTemplate.initialization_fee }} 学术积分
+                {{ serviceTemplate.price }} 学术积分
               </div>
             </div>
             <div class="text-body-small text-left">
@@ -136,6 +136,11 @@ import formatServiceTemplateApiResponse, {
   ServiceTemplateApiResponse,
   ServiceTemplateResponse, ServiceTemplateType,
 } from '@/network/response/service-template';
+import formatServiceApiResponse, {
+  ServiceResponse,
+  ServiceApiResponse,
+  ServiceType,
+} from '@/network/response/service';
 import UserAgreementDrawer from '@/components/UserAgreementDrawer.vue';
 import Footer from '@/components/Footer.vue';
 import Api from '@/network/api';
@@ -148,8 +153,10 @@ import { GlobalEvent } from '@/toolkits/constant';
   },
 })
 
-export default class ServiceSubscribeOrder extends Vue {
-  serviceTemplateUuid: string = '';
+export default class ServiceRenewOrder extends Vue {
+  serviceUuid: string = '';
+
+  service: ServiceResponse | null = null;
 
   serviceTemplate: ServiceTemplateResponse | null = null;
 
@@ -174,28 +181,32 @@ export default class ServiceSubscribeOrder extends Vue {
   }
 
   mounted() {
-    this.serviceTemplateUuid = this.$route.query.template_uuid as string;
-    console.log(this.serviceTemplateUuid);
-    if (!this.serviceTemplateUuid) {
+    this.serviceUuid = this.$route.query.service_uuid as string;
+    if (!this.serviceUuid) {
       this.$emit(GlobalEvent.GoBack);
     }
 
-    if (this.serviceTemplateUuid.length > 0) {
-      this.getServiceTemplate(this.serviceTemplateUuid);
+    if (this.serviceUuid.length > 0) {
+      this.getData();
     } else {
       this.$emit(GlobalEvent.GoBack);
     }
   }
 
-  getServiceTemplate(uuid: string) {
-    Api.getServiceTemplate(uuid)
+  async getData() {
+    await Api.getService(this.serviceUuid)
+      .then((response) => {
+        this.service = formatServiceApiResponse(response.data.service as ServiceApiResponse);
+        this.autoRenew = this.service.auto_renew === 1;
+        this.servicePassword = this.service.password;
+      });
+
+    await Api.getServiceTemplate((this.service as ServiceResponse).template_uuid)
       .then((response) => {
         this.serviceTemplate = formatServiceTemplateApiResponse(
           response.data.template as ServiceTemplateApiResponse,
         );
       });
-    // TODO fix here
-    this.autoRenew = true;
   }
 
   contactCustomerService() {
@@ -224,23 +235,7 @@ export default class ServiceSubscribeOrder extends Vue {
       return;
     }
 
-    if (this.servicePassword.length === 0) {
-      this.$message({
-        type: 'warning',
-        message: '请输入学术服务的连接密码',
-        showClose: true,
-      });
-      return;
-    }
-
-    let autoRenew: boolean | null;
-    if (this.isMonthlyService) {
-      // eslint-disable-next-line prefer-destructuring
-      autoRenew = this.autoRenew;
-    } else {
-      autoRenew = null;
-    }
-    Api.createOrder(this.serviceTemplateUuid, this.servicePassword, autoRenew)
+    Api.createRenewOrder(this.serviceUuid)
       .then((response) => {
         this.$notify({
           title: '订单创建成功',

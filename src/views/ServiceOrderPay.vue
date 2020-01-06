@@ -205,6 +205,11 @@ export default class ServiceOrderPay extends Vue {
     return this.$store.getters.isLoading;
   }
 
+  // beforeRouteLeave(to: any, from: any, next: any) {
+  //   clearInterval(this.checkOrderStatusInterval);
+  //   next();
+  // }
+
   mounted() {
     this.serviceOrderUuid = this.$route.query.order_uuid as string;
     if (!this.serviceOrderUuid) {
@@ -285,17 +290,21 @@ export default class ServiceOrderPay extends Vue {
     })
       .then((response) => {
         this.checkPayResult();
+      })
+      .catch((error) => {
+        this.$store.commit(MutationTypes.ON_LOADING_COMPLETED);
       });
   }
 
   checkPayResult() {
     this.checkResultCount = 0;
+    this.checkPayResultAction();
     this.checkOrderStatusInterval = setInterval(this.checkPayResultAction, 3000);
   }
 
   checkPayResultAction() {
     this.checkResultCount += 1;
-    if (this.checkResultCount > 3) {
+    if (this.checkResultCount > 4) {
       this.payFailed();
       return;
     }

@@ -354,6 +354,15 @@ class Api {
     });
   }
 
+  public createRenewOrder(uuid: string, showError: boolean = true, loadingAnimation: boolean = true,
+    config?: AxiosRequestConfig): AxiosPromise {
+    const data = {
+      service_uuid: uuid,
+    };
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.post(this.SERVICE_ORDER_URL, data, config);
+  }
+
   public getUnpaidOrder(): AxiosPromise {
     return this.axios.get(this.SERVICE_ORDER_URL, {
       params: {

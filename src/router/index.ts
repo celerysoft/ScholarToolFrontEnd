@@ -68,6 +68,11 @@ const routes = [
     component: () => import('@/views/ServiceSubscribeOrder.vue'),
   },
   {
+    path: '/service/renew/preview/',
+    name: '确认订单',
+    component: () => import('@/views/ServiceRenewOrder.vue'),
+  },
+  {
     path: '/service/order/pay/',
     name: '订单支付',
     component: () => import('@/views/ServiceOrderPay.vue'),

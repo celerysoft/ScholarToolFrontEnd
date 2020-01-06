@@ -1,5 +1,10 @@
+/* eslint-disable camelcase */
 export interface ServiceApiResponse {
   uuid: string
+
+  user_uuid: string
+
+  template_uuid: string
 
   type: number
 
@@ -17,12 +22,11 @@ export interface ServiceApiResponse {
 
   status: number
 
-  // eslint-disable-next-line camelcase
   auto_renew: number
 
-  // eslint-disable-next-line camelcase
   renew_at: string
 }
+/* eslint-enable camelcase */
 
 export interface ServiceResponse extends ServiceApiResponse {
   statusDescription: string;
