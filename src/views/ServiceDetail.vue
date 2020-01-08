@@ -2,7 +2,7 @@
   <div class="service-detail">
     <div v-if="service" class="service-detail-header">
       <div class="text-main-title text-color-primary">{{ service.title }}</div>
-      <div class="text-body text-color-regular">下次付款日期：{{ service.renewAt }}</div>
+      <div class="text-body text-color-regular">下次付款日期：{{ service.billingDate }}</div>
     </div>
 
     <el-divider>学术信息</el-divider>
@@ -55,7 +55,7 @@
           <div class="service-card-body">
             <div>
               <span>续费日期</span>
-              <span>{{ service.renewAt }}</span>
+              <span>{{ service.billingDate }}</span>
             </div>
             <div>
               <span>续费金额</span>

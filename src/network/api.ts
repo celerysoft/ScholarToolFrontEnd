@@ -108,7 +108,7 @@ class Api {
 
           error.message = error.response.data.message;
         } else if (error.request) {
-          console.log(error.request);
+          error.message = '服务器正在开小差，请稍后再试';
         } else {
           error.message = '未知错误';
         }

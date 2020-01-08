@@ -24,7 +24,7 @@ export interface ServiceApiResponse {
 
   auto_renew: number
 
-  renew_at: string
+  billing_date: string
 }
 /* eslint-enable camelcase */
 
@@ -41,7 +41,7 @@ export interface ServiceResponse extends ServiceApiResponse {
 
   autoRenewDescription: string;
 
-  renewAt: string;
+  billingDate: string;
 }
 
 export const enum ServiceType {
@@ -93,12 +93,12 @@ function formatBandwidthToString(bandwidth: number): string {
 }
 
 export default function formatServiceApiResponse(service: ServiceApiResponse): ServiceResponse {
-  let renewAt: string;
-  if (service.renew_at) {
-    const date = new Date(service.renew_at);
-    renewAt = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+  let billingDate: string;
+  if (service.billing_date) {
+    const date = new Date(service.billing_date);
+    billingDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
   } else {
-    renewAt = '';
+    billingDate = '';
   }
   let autoRenewDescription: string;
   if (service.type === ServiceType.monthly) {
@@ -119,6 +119,6 @@ export default function formatServiceApiResponse(service: ServiceApiResponse): S
     usageDescription,
     packageDescription,
     autoRenewDescription,
-    renewAt,
+    billingDate,
   });
 }
