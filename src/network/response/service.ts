@@ -73,8 +73,9 @@ function formatServiceStatus(status: number): string {
   const statusTextMap: Map<number, string> = new Map([
     [0, '待开通'],
     [1, '有效'],
-    [2, '待续费'],
-    [3, '失效'],
+    [3, '已暂停'],
+    [4, '失效'],
+    [5, '已欠费'],
   ]);
   let statusDescription: string | undefined = statusTextMap.get(status);
   if (typeof statusDescription === 'undefined') {
