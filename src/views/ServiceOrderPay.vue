@@ -43,7 +43,7 @@
                  v-if="isMonthlyService">
               <div class="text-subtitle">自动续费</div>
               <el-switch
-                v-model="orderSnapshot.auto_renew" disabled>
+                v-model="autoRenew" disabled>
               </el-switch>
             </div>
             <div class="service-information-password-hint"
@@ -203,6 +203,13 @@ export default class ServiceOrderPay extends Vue {
 
   get isLoading() {
     return this.$store.getters.isLoading;
+  }
+
+  get autoRenew(): boolean {
+    if (this.orderSnapshot) {
+      return this.orderSnapshot.auto_renew === 1;
+    }
+    return false;
   }
 
   // beforeRouteLeave(to: any, from: any, next: any) {
