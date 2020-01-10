@@ -33,6 +33,7 @@ import MutationTypes from '@/store/mutation-types';
 import LoginPayload from '@/store/mutation-models/login';
 import formatUserApiResponse, { UserResponse, UserApiResponse } from '@/network/response/user';
 import Footer from '@/components/Footer.vue';
+import { PermissionResponse } from '@/network/response/permission';
 
 @Component({
   components: {
@@ -123,6 +124,21 @@ export default class Login extends Vue {
               message: '登录成功',
               type: 'success',
             });
+
+            Api.getSelfPermission()
+              .then((userPermissionResponse) => {
+                /* eslint-disable-next-line prefer-destructuring */
+                const permissions: PermissionResponse[] = userPermissionResponse.data.permissions;
+                let isStaff = false;
+                // eslint-disable-next-line no-restricted-syntax
+                for (const permission of permissions) {
+                  if (permission.label === 'management') {
+                    isStaff = true;
+                    break;
+                  }
+                }
+                this.$store.commit(MutationTypes.ON_RECEIVED_USER_PERMISSION, isStaff);
+              });
 
             let next: any = this.$route.query.next ? this.$route.query.next : '/';
             next = next !== '/login/' ? next : '/';

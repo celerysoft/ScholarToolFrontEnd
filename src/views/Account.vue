@@ -158,6 +158,7 @@ import formatScholarPaymentAccountApiResponse, {
   ScholarPaymentAccountApiResponse,
   ScholarPaymentAccountResponse,
 } from '@/network/response/scholar-payment-account';
+import { PermissionResponse } from '@/network/response/permission';
 
 @Component({
   components: { Footer },
@@ -234,6 +235,7 @@ export default class Account extends Vue {
   getData() {
     if (this.isSelfAccountPage) {
       this.getUserInformation();
+      this.getUserPermissions();
       this.getUserScholarPaymentAccount();
     } else {
       this.getTargetUserInformation();
@@ -263,6 +265,23 @@ export default class Account extends Vue {
         response.data.account as ScholarPaymentAccountApiResponse,
       );
     });
+  }
+
+  getUserPermissions() {
+    Api.getSelfPermission()
+      .then((response) => {
+        /* eslint-disable-next-line prefer-destructuring */
+        const permissions: PermissionResponse[] = response.data.permissions;
+        let isStaff = false;
+        // eslint-disable-next-line no-restricted-syntax
+        for (const permission of permissions) {
+          if (permission.label === 'management') {
+            isStaff = true;
+            break;
+          }
+        }
+        this.$store.commit(MutationTypes.ON_RECEIVED_USER_PERMISSION, isStaff);
+      });
   }
 
   getUserInformation() {

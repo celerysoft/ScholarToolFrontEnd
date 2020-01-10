@@ -26,6 +26,8 @@ class Api {
 
   readonly EMAIL_URL: string = 'user/email';
 
+  readonly USER_PERMISSION_URL: string = 'user/permission';
+
   readonly EVENT_URL: string = 'event';
 
   readonly SERVICE_URL: string = 'service';
@@ -223,6 +225,12 @@ class Api {
       };
     }
     return this.axios.get(this.USER_URL, config);
+  }
+
+  public getSelfPermission(showError: boolean = false, loadingAnimation: boolean = false,
+    config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.get(this.USER_PERMISSION_URL, config);
   }
 
   public modifyPassword(oldPassword: string, newPassword: string): AxiosPromise {

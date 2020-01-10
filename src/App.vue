@@ -46,7 +46,7 @@
             <i class="el-icon-user"></i>
             <span>个人信息</span>
           </el-menu-item>
-          <el-menu-item index="4" route="/management/">
+          <el-menu-item v-if="isStaff" index="4" route="/management/">
             <i class="el-icon-setting"></i>
             <span>后台管理</span>
           </el-menu-item>
@@ -141,6 +141,10 @@ export default class App extends Vue {
 
   get isLogin() {
     return this.$store.getters.isLogin;
+  }
+
+  get isStaff() {
+    return this.$store.getters.isStaff;
   }
 
   get isLoading() {

@@ -18,4 +18,6 @@ export default class MutationTypes {
   public static ON_ACTIVATED_MENU_CHANGE: string = 'onActivatedMenuChange';
 
   public static TOGGLE_SIDE_BAR: string = 'toggleSideBar';
+
+  public static ON_RECEIVED_USER_PERMISSION: string = 'onReceivedUserPermission';
 }
