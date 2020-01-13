@@ -25,7 +25,7 @@
           </el-table-column>
           <el-table-column label="新闻标题" width="650">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" @click="viewNews(scope.row.url_for_desktop)">
+              <el-button type="text" @click="viewNews(scope.row.url_for_desktop)">
                 {{ scope.row.title }}
               </el-button>
             </template>

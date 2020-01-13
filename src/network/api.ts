@@ -52,6 +52,8 @@ class Api {
 
   readonly MANAGEMENT_SERVICE_TEMPLATE_URL: string = 'management/service/template';
 
+  readonly MANAGEMENT_SERVICE_USAGE_URL: string = 'management/service/usage';
+
   readonly MANAGEMENT_EVENT_URL: string = 'management/event';
 
   private axios: AxiosInstance;
@@ -531,6 +533,12 @@ class Api {
     config?: AxiosRequestConfig): AxiosPromise {
     config = this.deriveConfig(showError, loadingAnimation, config);
     return this.axios.put(this.MANAGEMENT_EVENT_URL, event, config);
+  }
+
+  public getServiceUsageForManagement(showError: boolean = true, loadingAnimation: boolean = true,
+    config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    return this.axios.get(this.MANAGEMENT_SERVICE_USAGE_URL, config);
   }
 }
 

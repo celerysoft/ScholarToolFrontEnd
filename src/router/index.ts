@@ -128,6 +128,11 @@ const routes = [
     component: () => import('@/views/ManagementEventEdit.vue'),
   },
   {
+    path: '/management/usage/',
+    name: '用量监控',
+    component: () => import('@/views/ManagementServiceUsage.vue'),
+  },
+  {
     path: '/404/',
     name: '页面不存在',
     component: () => import('@/views/NotFound.vue'),
