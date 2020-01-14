@@ -1,6 +1,7 @@
 <template>
   <div class="subscribe-service-list-component">
-    <span class="item" v-for="(item, index) in data" :key="index">
+    <span class="item" v-for="(item, index) in data" :key="index"
+          :class="{ 'last-item-in-a-row': (index + 1) % 3 === 0 }">
       <el-card shadow="hover">
         <div slot="header" class="list-title">
           <div>{{ item.title }}</div>
@@ -57,10 +58,19 @@ export default class SubscribeServiceList extends Vue {
 
   .item {
     margin-right: 2%;
+    margin-bottom: 16px;
     width: 32%;
     &:last-child {
       margin-right: 0;
     }
+  }
+
+  .last-item-in-a-row {
+    margin-right: 0;
+  }
+
+  .item-margin {
+    width: 2%;
   }
 
   .list-title {
