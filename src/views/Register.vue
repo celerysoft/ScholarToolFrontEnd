@@ -42,11 +42,10 @@
           <el-button @click="reset">重置</el-button>
           <el-button @click="doRegister" type="primary">注册</el-button>
         </el-form-item>
+        <el-form-item>
+          已有账号？试试<el-button class="text-body" type="text" @click="goLogin">登录</el-button>
+        </el-form-item>
       </el-form>
-
-      <div class="text-body" style="margin-left: 80px;">
-        已有账号？试试<el-button class="text-body" type="text" @click="goLogin">登录</el-button>
-      </div>
     </div>
     <Footer></Footer>
   </div>

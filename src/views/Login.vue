@@ -19,7 +19,15 @@
         <el-button @click="doLogin" type="primary">登录</el-button>
       </div>
       <div class="text-body register-hint">
-        还没有账号？请先<el-button class="text-body" type="text" @click="goRegister">注册</el-button>
+        <span>
+          还没有账号？请先
+          <el-button class="text-body" type="text" @click="goRegister">注册</el-button>
+        </span>
+        <span style="margin: 0 16px;">|</span>
+        <span>
+          想不起密码？
+          <el-button class="text-body" type="text" @click="forgetPassword">立即找回</el-button>
+        </span>
       </div>
     </div>
     <Footer></Footer>
@@ -150,6 +158,10 @@ export default class Login extends Vue {
   goRegister() {
     this.$router.push('/register/');
   }
+
+  forgetPassword() {
+    this.$router.push('/password-reset/');
+  }
 }
 </script>
 
@@ -185,7 +197,7 @@ export default class Login extends Vue {
   }
 
   .register-hint {
-    margin-top: 16px;
+    margin-top: 24px;
   }
 
   .placeholder {

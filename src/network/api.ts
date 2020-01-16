@@ -117,9 +117,23 @@ class Api {
           error.message = '未知错误';
         }
 
+        let errorTitle;
+        if (error.response.status === 400) {
+          errorTitle = '参数输入错误';
+        } else if (error.response.status === 403) {
+          errorTitle = '非法请求';
+        } else if (error.response.status === 404) {
+          errorTitle = '查找失败';
+        } else if (error.response.status === 500) {
+          errorTitle = '服务器内部错误';
+        } else if (error.response.status === 503) {
+          errorTitle = '服务暂不可用';
+        } else {
+          errorTitle = '与服务器通信时发生错误';
+        }
         if (error.config.showError) {
           Notification({
-            title: '与服务器通信时发生错误',
+            title: errorTitle,
             message: error.message,
             type: 'error',
           });
@@ -539,6 +553,13 @@ class Api {
     config?: AxiosRequestConfig): AxiosPromise {
     config = this.deriveConfig(showError, loadingAnimation, config);
     return this.axios.get(this.MANAGEMENT_SERVICE_USAGE_URL, config);
+  }
+
+  public sendingEmailForResetPassword(email: string, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    const data = { email };
+    return this.axios.patch(this.PASSWORD_URL, data, config);
   }
 }
 
