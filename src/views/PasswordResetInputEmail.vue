@@ -30,7 +30,7 @@ import Api from '@/network/api';
   },
 })
 
-export default class Login extends Vue {
+export default class PasswordResetInputEmail extends Vue {
   email: string = '';
 
   countDownIntervalId: number = NaN;

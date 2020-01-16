@@ -28,6 +28,11 @@ const routes = [
     component: () => import('@/views/PasswordResetInputEmail.vue'),
   },
   {
+    path: '/password-reset/password/',
+    name: '重设密码',
+    component: () => import('@/views/PasswordReset.vue'),
+  },
+  {
     path: '/',
     name: '主页',
     component: Home,
@@ -166,7 +171,8 @@ function isLogin(): boolean {
   return store.getters.isLogin;
 }
 
-const urlsForbiddenIfLogin = ['/login/', '/register/', '/password-reset/'];
+const urlsForbiddenIfLogin = ['/login/', '/register/', '/password-reset/',
+  '/password-reset/password/', '/password-reset/password'];
 
 const urlsWithoutLogin = ['/activation', '/activation/', '/account/email', '/account/email/']
   .concat(urlsForbiddenIfLogin);

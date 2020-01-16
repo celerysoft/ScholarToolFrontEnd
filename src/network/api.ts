@@ -561,6 +561,13 @@ class Api {
     const data = { email };
     return this.axios.patch(this.PASSWORD_URL, data, config);
   }
+
+  public resetPassword(password: string, jwt: string, showError: boolean = true,
+    loadingAnimation: boolean = true, config?: AxiosRequestConfig): AxiosPromise {
+    config = this.deriveConfig(showError, loadingAnimation, config);
+    const data = { password, jwt };
+    return this.axios.put(this.PASSWORD_URL, data, config);
+  }
 }
 
 export default new Api();
