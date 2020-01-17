@@ -43,6 +43,11 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination :page.sync="currentPage" :page-size.sync="pageSize"
+                :page-sizes.sync="pageSizes" :total.sync="totalRecord"
+                :max-page="maxPage" @loading-next-page="loadingNextPage"
+                @size-change="onSizeChange" @page-change="onPageChange">
+    </pagination>
 
     <!-- 学术积分充值 -->
     <el-dialog title="学术积分充值" width="400px" :visible.sync="scholarBalanceDialogVisible">
@@ -71,6 +76,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Footer from '@/components/Footer.vue';
+import Pagination from '@/components/Pagination.vue';
 import Api from '@/network/api';
 import formatUserApiResponse, { UserResponse, UserApiResponse } from '@/network/response/user';
 import formatScholarPaymentAccountApiResponse, {
@@ -83,6 +89,7 @@ import { MenuIndex } from '@/toolkits/constant';
 @Component({
   components: {
     Footer,
+    Pagination,
   },
 })
 
@@ -97,15 +104,49 @@ export default class ManagementUser extends Vue {
 
   rechargeAmount: number = 0;
 
+  currentPage: number = 1;
+
+  pageSize: number = 10;
+
+  pageSizes: number[] = [10, 20, 30, 50, 100];
+
+  maxPage: number = 1;
+
+  totalRecord: number = 0;
+
   mounted() {
     this.$store.commit(MutationTypes.ON_ACTIVATED_MENU_CHANGE, MenuIndex.Management);
 
     this.getData();
   }
 
+  onSizeChange() {
+    this.currentPage = 1;
+    this.getData();
+  }
+
+  onPageChange() {
+    this.getData();
+  }
+
+  loadingNextPage() {
+    this.currentPage += 1;
+    Api.getUsers(this.currentPage, this.pageSize).then((response) => {
+      const responseData: any = response.data;
+      this.totalRecord = responseData.total;
+      this.maxPage = responseData.max_page;
+      this.users = this.users.concat(
+        (responseData.users as UserApiResponse[]).map(formatUserApiResponse),
+      );
+    });
+  }
+
   getData() {
-    Api.getUsers(1, 10).then((response) => {
-      this.users = (response.data.users as UserApiResponse[]).map(formatUserApiResponse);
+    Api.getUsers(this.currentPage, this.pageSize).then((response) => {
+      const responseData: any = response.data;
+      this.totalRecord = responseData.total;
+      this.maxPage = responseData.max_page;
+      this.users = (responseData.users as UserApiResponse[]).map(formatUserApiResponse);
     });
   }
 

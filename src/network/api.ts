@@ -441,6 +441,7 @@ class Api {
     const params = {
       page,
       page_size: pageSize,
+      $order_by: 'created_at',
     };
     config = this.deriveConfig(showError, loadingAnimation, config, params);
     return this.axios.get(this.MANAGEMENT_USER_URL, config);

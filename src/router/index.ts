@@ -79,7 +79,7 @@ const routes = [
   },
   {
     path: '/service/renew/preview/',
-    name: '确认订单',
+    name: '确认续费订单',
     component: () => import('@/views/ServiceRenewOrder.vue'),
   },
   {

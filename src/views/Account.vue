@@ -224,7 +224,6 @@ export default class Account extends Vue {
   }
 
   mounted() {
-    console.log(this.$route.query.uu);
     this.targetUserUuid = this.$route.query.uuid as string;
 
     this.getData();
