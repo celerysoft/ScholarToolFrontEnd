@@ -29,7 +29,7 @@
         width="140">
       </el-table-column>
       <el-table-column
-        prop="registerDate"
+        prop="lastLoginDate"
         label="最后登录时间"
         width="140">
       </el-table-column>
