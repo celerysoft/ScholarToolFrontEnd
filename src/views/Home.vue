@@ -3,17 +3,21 @@
     <div>
       <h1 class="text-main-title">欢迎来到 Celery Soft 学术</h1>
 
-      <div>
-        <p>今天是<b>{{ date }}</b></p>
-        <p v-if="histories.length > 0">来看看历史上的今天发生了什么：</p>
+      <p>今天是<b>{{ date }}</b></p>
+
+      <div v-if="histories && histories.length > 0" class="today-in-history-block">
+        <el-divider>历史上的今天</el-divider>
         <ul v-if="histories" class="today-in-history-list">
           <li class="text-left" v-for="history in histories" v-bind:key="history.title">
             <p>
-              <b>{{ history.year }}</b>年，<span v-text="history.title"></span>
+              <b>{{ history.year }}</b>年，<span>{{ history.title }}</span>
             </p>
           </li>
         </ul>
-        <p v-if="yesterdayNewsData.length > 0">来看看昨日要闻：</p>
+      </div>
+
+      <div v-if="yesterdayNewsData && yesterdayNewsData.length > 0" class="yesterday-news-block">
+        <el-divider>昨日要闻</el-divider>
         <el-table
           v-if="yesterdayNewsData.length > 0"
           :data="yesterdayNewsData"
@@ -23,7 +27,7 @@
             type="index"
             width="50">
           </el-table-column>
-          <el-table-column label="新闻标题" width="650">
+          <el-table-column label="新闻标题" width="810">
             <template slot-scope="scope">
               <el-button type="text" @click="viewNews(scope.row.url_for_desktop)">
                 {{ scope.row.title }}
@@ -31,13 +35,9 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="view_count"
-            label="浏览数"
+            prop="trend"
+            label="热度"
             width="100">
-          </el-table-column>
-          <el-table-column
-            prop="comment_count"
-            label="评论数">
           </el-table-column>
         </el-table>
       </div>
@@ -123,8 +123,15 @@ export default class Home extends Vue {
     align-items: center;
   }
 
+  .today-in-history-block {
+    margin: 64px 0;
+  }
+
   .today-in-history-list {
-    margin-top: 16px;
+  }
+
+  .yesterday-news-block {
+    margin: 64px 0;
   }
 
   .placeholder {
