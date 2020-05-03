@@ -264,7 +264,7 @@ export default class ServiceOrderPay extends Vue {
     Api.getPaymentMethods().then((response) => {
       this.paymentMethods = (response.data.payment_methods as PaymentMethodApiResponse[])
         .map(formatPaymentMethodApiResponse);
-      if (this.paymentMethods.length > 1) {
+      if (this.paymentMethods.length > 0) {
         this.paymentMethodUuid = this.paymentMethods[0].uuid;
       }
     });
