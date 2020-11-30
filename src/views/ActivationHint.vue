@@ -44,16 +44,13 @@ export default class ActivationHint extends Vue {
   beforeRouteEnter(to: Route, from: Route, next: any) {
     next((vm: ActivationHint) => {
       if (vm.isUserActivated) {
-        console.log('用户已激活，返回上级');
         let toPath: string;
-        if (from !== null && from.path) {
+        if (from && from.path) {
           toPath = from.path;
         } else {
           toPath = '/';
         }
         next(toPath);
-      } else {
-        console.log('用户未激活');
       }
     });
   }

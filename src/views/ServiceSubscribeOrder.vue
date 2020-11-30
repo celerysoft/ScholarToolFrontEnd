@@ -175,7 +175,6 @@ export default class ServiceSubscribeOrder extends Vue {
 
   mounted() {
     this.serviceTemplateUuid = this.$route.query.template_uuid as string;
-    console.log(this.serviceTemplateUuid);
     if (!this.serviceTemplateUuid) {
       this.$emit(GlobalEvent.GoBack);
     }
